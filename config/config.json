@@ -1,7 +1,7 @@
 {
-    "server_ip": "127.0.0.1",
+    "server_ip": "192.168.1.249",
     "server_port_start": 27015,
-    "server_port_end": 28015,
+    "server_port_end": 27415,
     "remote_server_ip": "89.223.121.95",
     "remote_server_port": 27015,
     "log_directory": "./logs/",

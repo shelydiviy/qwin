@@ -1,2 +1,2 @@
 Loading configuration...
-Error: Failed to open config file: ./config/config.json
+Configuration loaded successfully: 192.168.1.249:27015 -> 89.223.121.95:27015

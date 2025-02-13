@@ -4,6 +4,8 @@
 #include <cstring>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <unordered_map>
+#include <chrono>
 #include <unistd.h> // Добавляем эту строку
 
 UdpProxy::UdpProxy(int startPort, int endPort, const std::string& remoteIp, int remotePort)
@@ -54,6 +56,8 @@ void UdpProxy::startProxy() {
             }
 
             addIpConnection(clientIp, ipMap, 10, 600);
+
+            logMessage("Received packet from " + std::string(clientIp) + " on port " + std::to_string(port), "proxy");
 
             sockaddr_in remoteAddr {};
             remoteAddr.sin_family = AF_INET;

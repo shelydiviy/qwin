@@ -9,7 +9,7 @@
 
 // Реализация конструктора
 ServerEmulator::ServerEmulator(const std::string& ip, int port) : ip(ip), port(port) {
-    std::cout << "ServerEmulator created with IP: " << ip << " and Port: " << port << std::endl;
+    logMessage("ServerEmulator created with IP: " + ip + " and Port: " + std::to_string(port), "server");
 }
 
 // Структура данных для пакета Master Server
@@ -20,10 +20,10 @@ struct MasterPacket {
     uint8_t serverType = 'd'; // Тип сервера (d - dedicated/internet server)
     uint8_t platform = 'l'; // Платформа (l - Linux)
     char gameDir[56] = "cstrike"; // Название директории игры
-    char description[64] = "AVRORA-CSDM.ONLINE|Sentry+Laser"; // Описание сервера
-    char mapName[16] = "de_dust2_2x2"; // Имя карты
-    char gameName[16] = "[CSDM]"; // Название игры
-    uint8_t players = 27; // Количество игроков
+    char description[64] = "AAAAA | CSDM | Sentry+Laser"; // Описание сервера
+    char mapName[16] = "de_dust2"; // Имя карты
+    char gameName[16] = "Counter-Strike"; // Название игры
+    uint8_t players = 11; // Количество игроков
     uint8_t maxPlayers = 32; // Максимальное количество игроков
     uint8_t bots = 2; // Количество ботов
     uint8_t dedicated = 'd'; // Специально посвящённый сервер
@@ -40,25 +40,21 @@ struct MasterPacket {
 void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterPort) {
     logMessage("Sending info to Master Server at " + masterIp + ":" + std::to_string(masterPort), "server");
 
-    // Создание UDP-сокета
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
         logMessage("Failed to create socket for Master Server", "error");
         return;
     }
 
-    // Настройка адреса Master Server
     sockaddr_in masterAddr {};
     masterAddr.sin_family = AF_INET;
     masterAddr.sin_port = htons(masterPort);
     inet_pton(AF_INET, masterIp.c_str(), &(masterAddr.sin_addr));
 
-    // Создание пакета данных
     MasterPacket packet;
     std::vector<uint8_t> buffer(sizeof(MasterPacket));
     memcpy(buffer.data(), &packet, sizeof(MasterPacket));
 
-    // Отправка пакета
     ssize_t bytesSent = sendto(sockfd, buffer.data(), buffer.size(), 0, (sockaddr*)&masterAddr, sizeof(masterAddr));
     if (bytesSent < 0) {
         logMessage("Failed to send data to Master Server", "error");
@@ -66,11 +62,10 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
         logMessage("Successfully sent info to Master Server", "server");
     }
 
-    close(sockfd); // Закрытие сокета
+    close(sockfd);
 }
 
 void ServerEmulator::sendMasterServerInfo() {
-    // Адреса Steam Master Server
     std::vector<std::pair<std::string, int>> masterServers = {
         {"hl2master.steampowered.com", 27011},
         {"208.64.200.55", 27011}
@@ -103,7 +98,6 @@ void ServerEmulator::listenForConnections() {
 
     logMessage("Successfully bound to port " + std::to_string(port), "server");
 
-    // Периодическая отправка информации на Master Server
     while (true) {
         sendMasterServerInfo();
         sleep(60); // Отправляем каждые 60 секунд

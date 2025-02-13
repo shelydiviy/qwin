@@ -1,13 +1,20 @@
 #!/bin/bash
 
+# Переход в корневую директорию проекта
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+cd "$SCRIPT_DIR/.."
+
 # Путь к бинарному файлу
-BINARY="./../build/tiny-csgo-mirror-system"
+BINARY="./build/tiny-csgo-mirror-system"
 
 # Создание директории для логов, если её нет
-LOG_DIR="./../logs"
+LOG_DIR="./logs"
 if [ ! -d "$LOG_DIR" ]; then
     mkdir -p "$LOG_DIR"
 fi
+
+# Увеличение лимита открытых файлов
+ulimit -n 65535
 
 # Функция запуска
 start() {
@@ -16,7 +23,9 @@ start() {
         echo "System is already running!"
         exit 1
     fi
-    nohup "$BINARY" > "$LOG_DIR/system.log" 2>&1 &
+
+    # Запуск программы с явным указанием пути к конфигурационному файлу
+    nohup "$BINARY" --config "$(pwd)/config/config.json" > "$LOG_DIR/system.log" 2>&1 &
     echo "System started successfully."
 }
 

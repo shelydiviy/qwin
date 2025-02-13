@@ -2,7 +2,7 @@
 #include <ctime>
 #include <fstream>
 #include <iomanip>
-#include <iostream> // Добавляем эту строку
+#include <iostream>
 #include <unordered_map>
 #include <chrono>
 
@@ -18,7 +18,7 @@ void logMessage(const std::string& message, const std::string& logBaseName) {
 
     std::ofstream log(logFile, std::ios::app);
     if (!log.is_open()) {
-        std::cerr << "Failed to open log file: " << logFile << std::endl; // Используется здесь
+        std::cerr << "Failed to open log file: " << logFile << std::endl;
         return;
     }
 
@@ -28,6 +28,9 @@ void logMessage(const std::string& message, const std::string& logBaseName) {
 
     log << "[" << timestamp << "] " << message << std::endl;
     log.close();
+    
+    // Добавляем вывод в консоль для отладки
+    std::cout << "[" << timestamp << "] " << message << std::endl;
 }
 
 Config loadConfig(const std::string& configPath) {
@@ -49,6 +52,9 @@ Config loadConfig(const std::string& configPath) {
     config.maxConnectionsPerIp = jsonConfig["max_connections_per_ip"];
     config.blockDurationMinutes = jsonConfig["block_duration_minutes"];
 
+    logMessage("Configuration loaded: " + config.serverIp + ":" + std::to_string(config.serverPortStart) +
+               " -> " + config.remoteServerIp + ":" + std::to_string(config.remoteServerPort), "system");
+
     return config;
 }
 
@@ -57,6 +63,7 @@ bool isIpBlocked(const std::string& ip, std::unordered_map<std::string, std::pai
 
     for (auto it = ipMap.begin(); it != ipMap.end(); ) {
         if (std::chrono::duration_cast<std::chrono::seconds>(now - it->second.second).count() > blockDurationSeconds) {
+            logMessage("Removing expired entry for IP: " + it->first, "proxy");
             it = ipMap.erase(it);
         } else {
             ++it;
@@ -67,7 +74,12 @@ bool isIpBlocked(const std::string& ip, std::unordered_map<std::string, std::pai
         return false;
     }
 
-    return ipMap[ip].first >= maxConnections;
+    if (ipMap[ip].first >= maxConnections) {
+        logMessage("IP blocked: " + ip, "error");
+        return true;
+    }
+
+    return false;
 }
 
 void addIpConnection(const std::string& ip, std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, int maxConnections, int blockDurationSeconds) {
@@ -75,10 +87,12 @@ void addIpConnection(const std::string& ip, std::unordered_map<std::string, std:
 
     if (ipMap.find(ip) == ipMap.end()) {
         ipMap[ip] = {1, now};
+        logMessage("New connection from IP: " + ip, "proxy");
     } else {
         if (ipMap[ip].first < maxConnections) {
             ipMap[ip].first++;
             ipMap[ip].second = now;
+            logMessage("Incremented connection count for IP: " + ip, "proxy");
         }
     }
 }

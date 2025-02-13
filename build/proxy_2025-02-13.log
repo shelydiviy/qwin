@@ -1,0 +1,19 @@
+[2025-02-13 20:36:54] Starting UDP Proxy from ports 27015 to 27415 and forwarding to 89.223.121.95:27015
+[2025-02-13 20:36:54] Starting UDP Proxy from ports 27015 to 27415 and forwarding to 89.223.121.95:27015
+[2025-02-13 20:36:54] Listening on port 27025
+[2025-02-13 20:38:06] New connection from IP: 192.168.1.1
+[2025-02-13 20:38:06] Received packet from 192.168.1.1 on port 27025
+[2025-02-13 20:38:07] New connection from IP: 89.223.121.95
+[2025-02-13 20:38:07] Received packet from 89.223.121.95 on port 27025
+[2025-02-13 20:38:25] Incremented connection count for IP: 192.168.1.1
+[2025-02-13 20:38:25] Received packet from 192.168.1.1 on port 27025
+[2025-02-13 20:38:26] Incremented connection count for IP: 89.223.121.95
+[2025-02-13 20:38:26] Received packet from 89.223.121.95 on port 27025
+[2025-02-13 20:39:59] Incremented connection count for IP: 192.168.1.1
+[2025-02-13 20:39:59] Received packet from 192.168.1.1 on port 27025
+[2025-02-13 20:39:59] Incremented connection count for IP: 89.223.121.95
+[2025-02-13 20:39:59] Received packet from 89.223.121.95 on port 27025
+[2025-02-13 20:43:01] Incremented connection count for IP: 192.168.1.1
+[2025-02-13 20:43:01] Received packet from 192.168.1.1 on port 27025
+[2025-02-13 20:43:02] Incremented connection count for IP: 89.223.121.95
+[2025-02-13 20:43:02] Received packet from 89.223.121.95 on port 27025
