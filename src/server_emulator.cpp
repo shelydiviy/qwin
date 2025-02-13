@@ -1,12 +1,16 @@
 #include "server_emulator.h"
 #include "utils.h"
 #include <asio.hpp>
-#include <thread> // Добавляем эту строку
+#include <thread>
 #include <chrono>
 
 // Реализация конструктора
 ServerEmulator::ServerEmulator(const std::string& ip, int port)
     : ip(ip), port(port), bound(false), ioContext(), socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), port)) {}
+
+bool ServerEmulator::isBound() const {
+    return bound;
+}
 
 void ServerEmulator::listenForConnections() {
     try {
@@ -17,15 +21,11 @@ void ServerEmulator::listenForConnections() {
 
         while (true) {
             sendMasterServerInfo();
-            std::this_thread::sleep_for(std::chrono::seconds(60)); // Используем sleep_for
+            std::this_thread::sleep_for(std::chrono::seconds(60));
         }
     } catch (const std::exception& e) {
         logMessage("Error in server on port " + std::to_string(port) + ": " + std::string(e.what()), "error");
     }
-}
-
-bool ServerEmulator::isBound() const {
-    return bound;
 }
 
 void ServerEmulator::sendMasterServerInfo() {
@@ -43,9 +43,6 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
     logMessage("Sending info to Master Server at " + masterIp + ":" + std::to_string(masterPort), "server");
 
     try {
-        asio::ip::udp::resolver resolver(ioContext);
-        asio::ip::udp::endpoint endpoint = *resolver.resolve(masterIp, std::to_string(masterPort)).begin();
-
         struct MasterPacket {
             uint8_t header = 0x66; // Заголовок пакета
             uint8_t challenge = 0x00; // Challenge
@@ -68,6 +65,9 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
         MasterPacket packet;
         std::vector<uint8_t> buffer(sizeof(MasterPacket));
         memcpy(buffer.data(), &packet, sizeof(MasterPacket));
+
+        asio::ip::udp::resolver resolver(ioContext);
+        asio::ip::udp::endpoint endpoint = *resolver.resolve(masterIp, std::to_string(masterPort)).begin();
 
         socket.send_to(asio::buffer(buffer), endpoint);
         logMessage("Successfully sent info to Master Server", "server");

@@ -806,6 +806,7 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/main.cpp.o: \
  /usr/include/asio/windows/stream_handle.hpp \
  /usr/include/asio/writable_pipe.hpp /usr/include/asio/write.hpp \
  /usr/include/asio/write_at.hpp /usr/include/asio/impl/write_at.hpp \
+ /usr/include/c++/11/thread /usr/include/c++/11/bits/this_thread_sleep.h \
  /home/sprut/qwin/include/udp_proxy.h /home/sprut/qwin/include/utils.h \
  /home/sprut/qwin/include/nlohmann/json.hpp \
  /usr/include/c++/11/forward_list /usr/include/c++/11/bits/forward_list.h \
@@ -856,5 +857,4 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/main.cpp.o: \
  /usr/include/c++/11/optional /usr/include/c++/11/numeric \
  /usr/include/c++/11/bits/stl_numeric.h \
  /usr/include/c++/11/pstl/glue_numeric_defs.h \
- /usr/include/c++/11/iostream /usr/include/c++/11/thread \
- /usr/include/c++/11/bits/this_thread_sleep.h
+ /usr/include/c++/11/iostream
