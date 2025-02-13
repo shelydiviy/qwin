@@ -1,0 +1,10 @@
+{
+    "server_ip": "127.0.0.1",
+    "server_port_start": 27015,
+    "server_port_end": 28015,
+    "remote_server_ip": "89.223.121.95",
+    "remote_server_port": 27015,
+    "log_directory": "./logs/",
+    "max_connections_per_ip": 10,
+    "block_duration_minutes": 10
+}

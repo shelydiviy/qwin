@@ -1,0 +1,3 @@
+/home/sprut/qwin/build/CMakeFiles/tiny-csgo-mirror-system.dir
+/home/sprut/qwin/build/CMakeFiles/edit_cache.dir
+/home/sprut/qwin/build/CMakeFiles/rebuild_cache.dir
