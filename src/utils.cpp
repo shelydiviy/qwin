@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <chrono>
+#include <filesystem>
 
 std::string getLogFileName(const std::string& baseName) {
     time_t now = time(nullptr);
@@ -28,12 +29,13 @@ void logMessage(const std::string& message, const std::string& logBaseName) {
 
     log << "[" << timestamp << "] " << message << std::endl;
     log.close();
-    
-    // Добавляем вывод в консоль для отладки
-    std::cout << "[" << timestamp << "] " << message << std::endl;
 }
 
 Config loadConfig(const std::string& configPath) {
+    if (!std::filesystem::exists(configPath)) {
+        throw std::runtime_error("Failed to open config file: " + configPath);
+    }
+
     std::ifstream file(configPath);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open config file: " + configPath);

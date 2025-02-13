@@ -8,10 +8,12 @@ public:
     ServerEmulator(const std::string& ip, int port);
     void sendMasterServerInfo();
     void listenForConnections();
+    bool isBound() const; // Метод для проверки привязки
 
 private:
     std::string ip;
     int port;
+    bool bound = false;
 
     void sendToMasterServer(const std::string& masterIp, int masterPort);
 };

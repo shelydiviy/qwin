@@ -4,13 +4,11 @@
 #include <cstring>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-#include <unistd.h> // Для использования close()
-#include <cstdlib>  // Для использования sleep()
+#include <unistd.h>
+#include <cstdlib>
 
 // Реализация конструктора
-ServerEmulator::ServerEmulator(const std::string& ip, int port) : ip(ip), port(port) {
-    logMessage("ServerEmulator created with IP: " + ip + " and Port: " + std::to_string(port), "server");
-}
+ServerEmulator::ServerEmulator(const std::string& ip, int port) : ip(ip), port(port), bound(false) {}
 
 // Структура данных для пакета Master Server
 struct MasterPacket {
@@ -20,21 +18,16 @@ struct MasterPacket {
     uint8_t serverType = 'd'; // Тип сервера (d - dedicated/internet server)
     uint8_t platform = 'l'; // Платформа (l - Linux)
     char gameDir[56] = "cstrike"; // Название директории игры
-    char description[64] = "AAAAA | CSDM | Sentry+Laser"; // Описание сервера
+    char description[64] = "CS 1.6 Dedicated Mirror Server | CSDM | Sentry+Laser"; // Описание сервера
     char mapName[16] = "de_dust2"; // Имя карты
     char gameName[16] = "Counter-Strike"; // Название игры
-    uint8_t players = 11; // Количество игроков
+    uint8_t players = 0; // Количество игроков
     uint8_t maxPlayers = 32; // Максимальное количество игроков
-    uint8_t bots = 2; // Количество ботов
+    uint8_t bots = 0; // Количество ботов
     uint8_t dedicated = 'd'; // Специально посвящённый сервер
     uint8_t os = 'l'; // Операционная система (Linux)
     uint8_t passwordProtected = 0; // Защищён ли паролем
     uint8_t hasMods = 1; // Есть ли модификации (1 - да, 0 - нет)
-
-    // Информация о модификации
-    char modName[64] = "CSDM"; // Название модификации
-    uint32_t modVersion = 1; // Версия модификации
-    uint8_t modDownloadLink = 0; // Ссылка на скачивание мода (0 - нет)
 };
 
 void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterPort) {
@@ -77,8 +70,6 @@ void ServerEmulator::sendMasterServerInfo() {
 }
 
 void ServerEmulator::listenForConnections() {
-    logMessage("Listening on " + ip + ":" + std::to_string(port), "server");
-
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
         logMessage("Failed to create socket for port " + std::to_string(port), "error");
@@ -96,10 +87,15 @@ void ServerEmulator::listenForConnections() {
         return;
     }
 
+    bound = true; // Устанавливаем флаг привязки
     logMessage("Successfully bound to port " + std::to_string(port), "server");
 
     while (true) {
         sendMasterServerInfo();
         sleep(60); // Отправляем каждые 60 секунд
     }
+}
+
+bool ServerEmulator::isBound() const {
+    return bound; // Возвращаем статус привязки
 }

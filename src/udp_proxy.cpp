@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <unordered_map>
 #include <chrono>
-#include <unistd.h> // Добавляем эту строку
+#include <unistd.h>
 
 UdpProxy::UdpProxy(int startPort, int endPort, const std::string& remoteIp, int remotePort)
     : startPort(startPort), endPort(endPort), remoteServerIp(remoteIp), remoteServerPort(remotePort) {}
@@ -31,7 +31,7 @@ void UdpProxy::startProxy() {
 
         if (bind(sockfd, (sockaddr*)&addr, sizeof(addr)) < 0) {
             logMessage("Failed to bind to port " + std::to_string(port), "error");
-            close(sockfd); // Используется здесь
+            close(sockfd);
             continue;
         }
 

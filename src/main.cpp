@@ -41,11 +41,18 @@ int main(int argc, char* argv[]) {
 
         std::vector<std::thread> serverThreads;
 
-        // Создание 500 серверов на разных портах
+        // Создание серверов на разных портах
         for (int port = config.serverPortStart; port <= config.serverPortEnd; ++port) {
             try {
                 logMessage("Creating server on port " + std::to_string(port), "system");
                 ServerEmulator server(config.serverIp, port);
+
+                // Проверяем успешность привязки
+                if (!server.isBound()) {
+                    logMessage("Failed to bind to port " + std::to_string(port), "error");
+                    continue;
+                }
+
                 serverThreads.emplace_back(std::thread(&ServerEmulator::listenForConnections, &server));
                 logMessage("Server thread started on port " + std::to_string(port), "server");
             } catch (const std::exception& e) {
