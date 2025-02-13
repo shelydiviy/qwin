@@ -2,19 +2,23 @@
 #define SERVER_EMULATOR_H
 
 #include <string>
+#include <asio.hpp>
 
 class ServerEmulator {
 public:
     ServerEmulator(const std::string& ip, int port);
-    void sendMasterServerInfo();
     void listenForConnections();
-    bool isBound() const; // Метод для проверки привязки
+    bool isBound() const;
 
 private:
     std::string ip;
     int port;
     bool bound = false;
 
+    asio::io_context ioContext; // Добавляем io_context
+    asio::ip::udp::socket socket; // Добавляем UDP-сокет
+
+    void sendMasterServerInfo();
     void sendToMasterServer(const std::string& masterIp, int masterPort);
 };
 

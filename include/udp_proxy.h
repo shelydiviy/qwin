@@ -2,6 +2,7 @@
 #define UDP_PROXY_H
 
 #include <string>
+#include <asio.hpp>
 #include <unordered_map>
 #include <chrono>
 
@@ -15,6 +16,14 @@ private:
     int endPort;
     std::string remoteServerIp;
     int remoteServerPort;
+
+    asio::io_context ioContext; // Добавляем io_context
+    std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>> ipMap;
+
+    asio::ip::udp::endpoint clientEndpoint; // Endpoint для клиента
+    std::array<char, 1024> buffer; // Буфер для данных
+
+    void handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t bytesReceived);
 };
 
 #endif // UDP_PROXY_H
