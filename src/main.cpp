@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         for (int port = config.serverPortStart; port <= config.serverPortEnd; ++port) {
             try {
                 logMessage("Creating server on port " + std::to_string(port), "system");
-                ServerEmulator server(config.serverIp, port);
+                ServerEmulator server(config.serverIp, port, config); // Передаём конфигурацию
 
                 if (!server.isBound()) {
                     logMessage("Failed to bind to port " + std::to_string(port), "error");

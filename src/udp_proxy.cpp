@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <chrono>
 
-// Конструктор с переименованными параметрами
 UdpProxy::UdpProxy(int startPortParam, int endPortParam, const std::string& remoteIpParam, int remotePortParam, const Config& configParam)
     : startPort(startPortParam), endPort(endPortParam), remoteServerIp(remoteIpParam), remoteServerPort(remotePortParam), config(configParam),
       clientEndpoint(), buffer() {}
@@ -72,7 +71,7 @@ void UdpProxy::handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t b
 
         socket.async_send_to(
             asio::buffer(buffer, bytesReceived), remoteEndpoint,
-            [clientIp](std::error_code ec) { // Убираем unused parameter
+            [clientIp](std::error_code ec, std::size_t bytesSent) { // Добавляем второй параметр
                 if (ec) {
                     logMessage("Error sending packet to remote server for IP: " + clientIp + ": " + ec.message(), "error");
                 }

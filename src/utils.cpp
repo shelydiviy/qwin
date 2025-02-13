@@ -65,8 +65,11 @@ Config loadConfig(const std::string& configPath) {
     return config;
 }
 
-bool isIpBlocked(const std::string& ip, std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, 
-                 const std::vector<std::string>& excludedIps, int maxConnections, int blockDurationSeconds) {
+bool isIpBlocked(const std::string& ip, 
+                 std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, 
+                 const std::vector<std::string>& excludedIps, 
+                 int maxConnections, 
+                 int blockDurationSeconds) {
     auto now = std::chrono::steady_clock::now();
 
     // Проверяем, является ли IP исключённым
@@ -75,7 +78,7 @@ bool isIpBlocked(const std::string& ip, std::unordered_map<std::string, std::pai
         return false;
     }
 
-    // Очищаем устаревшие записи
+    // Удаляем устаревшие записи
     for (auto it = ipMap.begin(); it != ipMap.end(); ) {
         if (std::chrono::duration_cast<std::chrono::seconds>(now - it->second.second).count() > blockDurationSeconds) {
             logMessage("Removing expired entry for IP: " + it->first, "proxy");
@@ -98,8 +101,11 @@ bool isIpBlocked(const std::string& ip, std::unordered_map<std::string, std::pai
     return false;
 }
 
-void addIpConnection(const std::string& ip, std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, 
-                     const std::vector<std::string>& excludedIps, int maxConnections, int blockDurationSeconds) {
+void addIpConnection(const std::string& ip, 
+                     std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, 
+                     const std::vector<std::string>& excludedIps, 
+                     int maxConnections, 
+                     int blockDurationSeconds) {
     // Проверяем, является ли IP исключённым
     if (std::find(excludedIps.begin(), excludedIps.end(), ip) != excludedIps.end()) {
         logMessage("Excluded IP: " + ip, "proxy");

@@ -765,4 +765,6 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h \
  /usr/include/c++/11/optional /usr/include/c++/11/numeric \
  /usr/include/c++/11/bits/stl_numeric.h \
- /usr/include/c++/11/pstl/glue_numeric_defs.h
+ /usr/include/c++/11/pstl/glue_numeric_defs.h \
+ /home/sprut/qwin/include/utils.h /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/this_thread_sleep.h
