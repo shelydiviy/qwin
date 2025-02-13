@@ -4,8 +4,9 @@
 #include <unordered_map>
 #include <chrono>
 
-UdpProxy::UdpProxy(int startPort, int endPort, const std::string& remoteIp, int remotePort)
-    : startPort(startPort), endPort(endPort), remoteServerIp(remoteIp), remoteServerPort(remotePort),
+// Конструктор с переименованными параметрами
+UdpProxy::UdpProxy(int startPortParam, int endPortParam, const std::string& remoteIpParam, int remotePortParam, const Config& configParam)
+    : startPort(startPortParam), endPort(endPortParam), remoteServerIp(remoteIpParam), remoteServerPort(remotePortParam), config(configParam),
       clientEndpoint(), buffer() {}
 
 void UdpProxy::startProxy() {
@@ -13,44 +14,39 @@ void UdpProxy::startProxy() {
                " and forwarding to " + remoteServerIp + ":" + std::to_string(remoteServerPort), "proxy");
 
     try {
-        // Создание сокетов для каждого порта
         for (int port = startPort; port <= endPort; ++port) {
             asio::ip::udp::socket sock(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), port));
-            sockets.push_back(std::move(sock)); // Добавляем сокет в вектор
+            sockets.push_back(std::move(sock));
 
             logMessage("Listening on port " + std::to_string(port), "proxy");
 
-            // Начинаем асинхронный приём пакетов
             sockets.back().async_receive_from(
                 asio::buffer(buffer), clientEndpoint,
-                [this, port](std::error_code ec, std::size_t bytesReceived) {
-                    if (!ec && bytesReceived > 0) {
-                        handleIncomingPacket(sockets[port - startPort], bytesReceived); // Обрабатываем пакет
-                    } else if (ec != asio::error::operation_aborted) { // Игнорируем Operation Aborted
-                        logMessage("Error receiving packet on port " + std::to_string(port) + ": " + ec.message(), "error");
+                [this, port](std::error_code ecOuter, std::size_t bytesReceivedOuter) { // Переименованные параметры
+                    if (!ecOuter && bytesReceivedOuter > 0) {
+                        handleIncomingPacket(sockets[port - startPort], bytesReceivedOuter);
+                    } else if (ecOuter != asio::error::operation_aborted) {
+                        logMessage("Error receiving packet on port " + std::to_string(port) + ": " + ecOuter.message(), "error");
                     }
 
-                    // После обработки снова начинаем слушать
-                    if (!ec) {
+                    if (!ecOuter) {
                         sockets[port - startPort].async_receive_from(
                             asio::buffer(buffer), clientEndpoint,
-                            [this, port](std::error_code ec, std::size_t bytesReceived) {
-                                if (!ec && bytesReceived > 0) {
-                                    handleIncomingPacket(sockets[port - startPort], bytesReceived);
-                                } else if (ec != asio::error::operation_aborted) {
-                                    logMessage("Error receiving packet on port " + std::to_string(port) + ": " + ec.message(), "error");
+                            [this, port](std::error_code ecInner, std::size_t bytesReceivedInner) { // Переименованные параметры
+                                if (!ecInner && bytesReceivedInner > 0) {
+                                    handleIncomingPacket(sockets[port - startPort], bytesReceivedInner);
+                                } else if (ecInner != asio::error::operation_aborted) {
+                                    logMessage("Error receiving packet on port " + std::to_string(port) + ": " + ecInner.message(), "error");
                                 }
                             });
                     }
                 });
         }
 
-        // Запускаем io_context в отдельном потоке
         std::thread ioThread([this]() {
             ioContext.run();
         });
 
-        // Ожидаем завершение работы io_context
         ioThread.join();
     } catch (const std::exception& e) {
         logMessage("Error starting UDP Proxy: " + std::string(e.what()), "error");
@@ -61,12 +57,12 @@ void UdpProxy::handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t b
     std::string clientIp = clientEndpoint.address().to_string();
     int clientPort = clientEndpoint.port();
 
-    if (isIpBlocked(clientIp, ipMap, 10, 600)) {
+    if (isIpBlocked(clientIp, ipMap, config.excludedIps, config.maxConnectionsPerIp, config.blockDurationMinutes * 60)) {
         logMessage("IP blocked: " + clientIp, "error");
         return;
     }
 
-    addIpConnection(clientIp, ipMap, 10, 600);
+    addIpConnection(clientIp, ipMap, config.excludedIps, config.maxConnectionsPerIp, config.blockDurationMinutes * 60);
 
     logMessage("Received packet from " + clientIp + ":" + std::to_string(clientPort), "proxy");
 
@@ -76,7 +72,7 @@ void UdpProxy::handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t b
 
         socket.async_send_to(
             asio::buffer(buffer, bytesReceived), remoteEndpoint,
-            [clientIp](std::error_code ec, std::size_t bytesSent) {
+            [clientIp](std::error_code ec) { // Убираем unused parameter
                 if (ec) {
                     logMessage("Error sending packet to remote server for IP: " + clientIp + ": " + ec.message(), "error");
                 }

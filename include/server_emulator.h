@@ -3,12 +3,10 @@
 
 #include <string>
 #include <asio.hpp>
-#include <thread>
-#include <chrono>
 
 class ServerEmulator {
 public:
-    ServerEmulator(const std::string& ip, int port);
+    ServerEmulator(const std::string& ipParam, int portParam); // Переименованные параметры
     void listenForConnections();
     bool isBound() const;
 
@@ -17,8 +15,8 @@ private:
     int port;
     bool bound = false;
 
-    asio::io_context ioContext; // Добавляем io_context
-    asio::ip::udp::socket socket; // UDP-сокет
+    asio::io_context ioContext;
+    asio::ip::udp::socket socket;
 
     void sendMasterServerInfo();
     void sendToMasterServer(const std::string& masterIp, int masterPort);

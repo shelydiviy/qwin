@@ -5,7 +5,7 @@ SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 cd "$SCRIPT_DIR/.."
 
 # Путь к бинарному файлу
-BINARY="./build/tiny-csgo-mirror-system"
+BINARY="./build/bin/tiny-csgo-mirror-system"
 
 # Создание директории для логов, если её нет
 LOG_DIR="./logs"

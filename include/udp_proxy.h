@@ -6,10 +6,11 @@
 #include <unordered_map>
 #include <chrono>
 #include <vector>
+#include "utils.h" // Для Config
 
 class UdpProxy {
 public:
-    UdpProxy(int startPort, int endPort, const std::string& remoteIp, int remotePort);
+    UdpProxy(int startPortParam, int endPortParam, const std::string& remoteIpParam, int remotePortParam, const Config& configParam);
     void startProxy();
 
 private:
@@ -17,13 +18,14 @@ private:
     int endPort;
     std::string remoteServerIp;
     int remoteServerPort;
+    Config config; // Храним конфигурацию
 
-    asio::io_context ioContext; // Единый io_context для всех портов
-    std::vector<asio::ip::udp::socket> sockets; // Вектор сокетов
+    asio::io_context ioContext;
+    std::vector<asio::ip::udp::socket> sockets;
     std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>> ipMap;
 
-    asio::ip::udp::endpoint clientEndpoint; // Endpoint для клиента
-    std::array<char, 1024> buffer; // Буфер для данных
+    asio::ip::udp::endpoint clientEndpoint;
+    std::array<char, 1024> buffer;
 
     void handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t bytesReceived);
 };

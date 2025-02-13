@@ -4,6 +4,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <chrono>
 
 int main(int argc, char* argv[]) {
     try {
@@ -21,6 +22,9 @@ int main(int argc, char* argv[]) {
         }
 
         Config config = loadConfig(configPath);
+
+        logMessage("System started with configuration: " + config.serverIp + ":" + std::to_string(config.serverPortStart) +
+                   " -> " + config.remoteServerIp + ":" + std::to_string(config.remoteServerPort), "system");
 
         std::vector<std::thread> serverThreads;
 
@@ -41,8 +45,14 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        UdpProxy proxy(config.serverPortStart, config.serverPortEnd, config.remoteServerIp, config.remoteServerPort);
+        UdpProxy proxy(config.serverPortStart, config.serverPortEnd, config.remoteServerIp, config.remoteServerPort, config);
         std::thread proxyThread(&UdpProxy::startProxy, &proxy);
+
+        while (true) {
+            logMessage("System statistics: Total connections = " + std::to_string(totalConnections.load()) +
+                       ", Blocked connections = " + std::to_string(blockedConnections.load()), "system");
+            std::this_thread::sleep_for(std::chrono::minutes(1));
+        }
 
         for (auto& thread : serverThreads) {
             if (thread.joinable()) {

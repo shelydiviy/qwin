@@ -7,8 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/tiny-csgo-mirror-system.dir/src/udp_proxy.cpp.o.d"
   "CMakeFiles/tiny-csgo-mirror-system.dir/src/utils.cpp.o"
   "CMakeFiles/tiny-csgo-mirror-system.dir/src/utils.cpp.o.d"
-  "tiny-csgo-mirror-system"
-  "tiny-csgo-mirror-system.pdb"
+  "bin/tiny-csgo-mirror-system"
+  "bin/tiny-csgo-mirror-system.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

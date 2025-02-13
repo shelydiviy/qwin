@@ -1,10 +1,11 @@
 {
     "server_ip": "192.168.1.249",
     "server_port_start": 27015,
-    "server_port_end": 27414,
+    "server_port_end": 28014,
     "remote_server_ip": "89.223.121.95",
     "remote_server_port": 27015,
     "log_directory": "./logs/",
     "max_connections_per_ip": 10,
-    "block_duration_minutes": 10
+    "block_duration_minutes": 10,
+    "excluded_ips": ["127.0.0.1", "192.168.1.1"]
 }

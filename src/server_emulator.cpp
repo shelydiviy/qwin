@@ -1,12 +1,8 @@
 #include "server_emulator.h"
 #include "utils.h"
-#include <asio.hpp>
-#include <thread>
-#include <chrono>
 
-// Реализация конструктора
-ServerEmulator::ServerEmulator(const std::string& ip, int port)
-    : ip(ip), port(port), bound(false), ioContext(), socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), port)) {}
+ServerEmulator::ServerEmulator(const std::string& ipParam, int portParam) // Переименовываем параметры
+    : ip(ipParam), port(portParam), bound(false), ioContext(), socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), portParam)) {}
 
 bool ServerEmulator::isBound() const {
     return bound;
@@ -16,7 +12,6 @@ void ServerEmulator::listenForConnections() {
     try {
         logMessage("Listening on " + ip + ":" + std::to_string(port), "server");
 
-        // Запускаем цикл обработки событий
         ioContext.run();
 
         while (true) {
@@ -44,22 +39,22 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
 
     try {
         struct MasterPacket {
-            uint8_t header = 0x66; // Заголовок пакета
-            uint8_t challenge = 0x00; // Challenge
-            uint8_t protocol = 48; // Версия протокола
-            uint8_t serverType = 'd'; // Тип сервера (d - dedicated/internet server)
-            uint8_t platform = 'l'; // Платформа (l - Linux)
-            char gameDir[56] = "cstrike"; // Название директории игры
-            char description[64] = "CS 1.6 Dedicated Mirror Server | CSDM | Sentry+Laser"; // Описание сервера
-            char mapName[16] = "de_dust2"; // Имя карты
-            char gameName[16] = "Counter-Strike"; // Название игры
-            uint8_t players = 0; // Количество игроков
-            uint8_t maxPlayers = 32; // Максимальное количество игроков
-            uint8_t bots = 0; // Количество ботов
-            uint8_t dedicated = 'd'; // Специально посвящённый сервер
-            uint8_t os = 'l'; // Операционная система (Linux)
-            uint8_t passwordProtected = 0; // Защищён ли паролем
-            uint8_t hasMods = 1; // Есть ли модификации (1 - да, 0 - нет)
+            uint8_t header = 0x66;
+            uint8_t challenge = 0x00;
+            uint8_t protocol = 48;
+            uint8_t serverType = 'd';
+            uint8_t platform = 'l';
+            char gameDir[56] = "cstrike";
+            char description[64] = "CS 1.6 Dedicated Mirror Server | CSDM | Sentry+Laser";
+            char mapName[16] = "de_dust2";
+            char gameName[16] = "Counter-Strike";
+            uint8_t players = 0;
+            uint8_t maxPlayers = 32;
+            uint8_t bots = 0;
+            uint8_t dedicated = 'd';
+            uint8_t os = 'l';
+            uint8_t passwordProtected = 0;
+            uint8_t hasMods = 1;
         };
 
         MasterPacket packet;

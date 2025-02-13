@@ -45,7 +45,8 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
- /usr/include/c++/11/cstdint \
+ /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar2.h /usr/include/c++/11/cstdint \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
@@ -115,20 +116,27 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/sys/select.h \
  /usr/include/x86_64-linux-gnu/bits/select.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
- /usr/include/alloca.h /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/select2.h \
+ /usr/include/x86_64-linux-gnu/bits/select-decl.h /usr/include/alloca.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h \
  /usr/include/c++/11/bits/std_abs.h /usr/include/c++/11/cstdio \
  /usr/include/stdio.h /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
- /usr/include/c++/11/cerrno /usr/include/errno.h \
- /usr/include/x86_64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
- /usr/include/x86_64-linux-gnu/asm/errno.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio.h \
+ /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/c++/11/cerrno \
+ /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
+ /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/11/bits/charconv.h \
- /usr/include/c++/11/bits/basic_string.tcc /usr/include/asio.hpp \
+ /usr/include/c++/11/bits/basic_string.tcc \
+ /home/sprut/qwin/include/asio.hpp \
  /usr/include/asio/any_completion_executor.hpp \
  /usr/include/asio/detail/config.hpp /usr/include/c++/11/version \
  /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
@@ -136,6 +144,8 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h /usr/include/linux/version.h \
  /usr/include/asio/execution.hpp \
@@ -272,6 +282,8 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h \
  /usr/include/asio/impl/error_code.ipp /usr/include/c++/11/cstring \
  /usr/include/string.h /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
  /usr/include/asio/detail/local_free_on_block_exit.hpp \
  /usr/include/asio/detail/socket_types.hpp \
  /usr/include/x86_64-linux-gnu/sys/ioctl.h \
@@ -284,6 +296,7 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/sys/ttydefaults.h /usr/include/poll.h \
  /usr/include/x86_64-linux-gnu/sys/poll.h \
  /usr/include/x86_64-linux-gnu/bits/poll.h \
+ /usr/include/x86_64-linux-gnu/bits/poll2.h \
  /usr/include/x86_64-linux-gnu/sys/stat.h \
  /usr/include/x86_64-linux-gnu/bits/stat.h \
  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
@@ -302,7 +315,8 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/fcntl.h /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
- /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/sys/socket.h \
+ /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
+ /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket_type.h \
  /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
@@ -311,6 +325,7 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/x86_64-linux-gnu/asm/sockios.h \
  /usr/include/asm-generic/sockios.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
+ /usr/include/x86_64-linux-gnu/bits/socket2.h \
  /usr/include/x86_64-linux-gnu/sys/uio.h \
  /usr/include/x86_64-linux-gnu/bits/uio-ext.h \
  /usr/include/x86_64-linux-gnu/sys/un.h /usr/include/netinet/in.h \
@@ -362,7 +377,6 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/traits/submit_member.hpp \
  /usr/include/asio/traits/submit_free.hpp \
  /usr/include/asio/impl/any_completion_executor.ipp \
- /usr/include/asio/any_completion_executor.hpp \
  /usr/include/asio/any_completion_handler.hpp \
  /usr/include/asio/any_io_executor.hpp \
  /usr/include/asio/execution_context.hpp \
@@ -433,19 +447,12 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/impl/system_context.ipp \
  /usr/include/asio/associated_immediate_executor.hpp \
  /usr/include/asio/cancellation_state.hpp \
- /usr/include/asio/recycling_allocator.hpp \
- /usr/include/asio/any_io_executor.hpp /usr/include/asio/append.hpp \
+ /usr/include/asio/recycling_allocator.hpp /usr/include/asio/append.hpp \
  /usr/include/asio/impl/append.hpp \
  /usr/include/asio/detail/handler_cont_helpers.hpp \
  /usr/include/asio/handler_continuation_hook.hpp \
  /usr/include/asio/detail/utility.hpp /usr/include/asio/as_tuple.hpp \
- /usr/include/asio/impl/as_tuple.hpp \
- /usr/include/asio/associated_allocator.hpp \
- /usr/include/asio/associated_cancellation_slot.hpp \
- /usr/include/asio/associated_executor.hpp \
- /usr/include/asio/associated_immediate_executor.hpp \
- /usr/include/asio/associator.hpp /usr/include/asio/async_result.hpp \
- /usr/include/asio/awaitable.hpp \
+ /usr/include/asio/impl/as_tuple.hpp /usr/include/asio/awaitable.hpp \
  /usr/include/asio/basic_datagram_socket.hpp \
  /usr/include/asio/basic_socket.hpp \
  /usr/include/asio/detail/io_object_impl.hpp \
@@ -532,7 +539,6 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/detail/impl/signal_set_service.ipp \
  /usr/include/asio/detail/static_mutex.hpp \
  /usr/include/asio/detail/posix_static_mutex.hpp \
- /usr/include/asio/basic_socket.hpp \
  /usr/include/asio/basic_socket_acceptor.hpp \
  /usr/include/asio/basic_socket_iostream.hpp /usr/include/c++/11/istream \
  /usr/include/c++/11/ios /usr/include/c++/11/bits/basic_ios.h \
@@ -557,28 +563,23 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/detail/timer_scheduler_fwd.hpp \
  /usr/include/asio/detail/wait_handler.hpp \
  /usr/include/asio/wait_traits.hpp \
- /usr/include/asio/basic_socket_streambuf.hpp \
  /usr/include/asio/basic_stream_file.hpp \
- /usr/include/asio/basic_stream_socket.hpp \
  /usr/include/asio/basic_streambuf.hpp /usr/include/c++/11/algorithm \
  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
  /usr/include/asio/basic_streambuf_fwd.hpp \
- /usr/include/asio/basic_waitable_timer.hpp \
  /usr/include/asio/basic_writable_pipe.hpp \
  /usr/include/asio/bind_allocator.hpp \
  /usr/include/asio/bind_cancellation_slot.hpp \
  /usr/include/asio/bind_executor.hpp /usr/include/asio/uses_executor.hpp \
  /usr/include/asio/bind_immediate_executor.hpp \
- /usr/include/asio/buffer.hpp /usr/include/asio/buffer_registration.hpp \
+ /usr/include/asio/buffer_registration.hpp \
  /usr/include/asio/buffered_read_stream_fwd.hpp \
  /usr/include/asio/buffered_read_stream.hpp \
- /usr/include/asio/buffered_read_stream_fwd.hpp \
  /usr/include/asio/detail/buffer_resize_guard.hpp \
  /usr/include/asio/detail/buffered_stream_storage.hpp \
  /usr/include/asio/impl/buffered_read_stream.hpp \
  /usr/include/asio/buffered_stream_fwd.hpp \
  /usr/include/asio/buffered_stream.hpp \
- /usr/include/asio/buffered_read_stream.hpp \
  /usr/include/asio/buffered_write_stream.hpp \
  /usr/include/asio/buffered_write_stream_fwd.hpp \
  /usr/include/asio/completion_condition.hpp /usr/include/asio/write.hpp \
@@ -588,83 +589,34 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/detail/consuming_buffers.hpp \
  /usr/include/asio/detail/dependent_type.hpp \
  /usr/include/asio/impl/buffered_write_stream.hpp \
- /usr/include/asio/buffered_stream_fwd.hpp \
- /usr/include/asio/buffered_write_stream_fwd.hpp \
- /usr/include/asio/buffered_write_stream.hpp \
- /usr/include/asio/buffers_iterator.hpp \
- /usr/include/asio/cancellation_signal.hpp \
- /usr/include/asio/cancellation_state.hpp \
- /usr/include/asio/cancellation_type.hpp /usr/include/asio/co_spawn.hpp \
- /usr/include/asio/completion_condition.hpp /usr/include/asio/compose.hpp \
- /usr/include/asio/detail/composed_work.hpp /usr/include/asio/connect.hpp \
- /usr/include/asio/impl/connect.hpp /usr/include/asio/connect_pipe.hpp \
- /usr/include/asio/basic_readable_pipe.hpp \
- /usr/include/asio/basic_writable_pipe.hpp \
- /usr/include/asio/impl/connect_pipe.hpp \
+ /usr/include/asio/buffers_iterator.hpp /usr/include/asio/co_spawn.hpp \
+ /usr/include/asio/compose.hpp /usr/include/asio/detail/composed_work.hpp \
+ /usr/include/asio/connect.hpp /usr/include/asio/impl/connect.hpp \
  /usr/include/asio/connect_pipe.hpp \
+ /usr/include/asio/impl/connect_pipe.hpp \
  /usr/include/asio/impl/connect_pipe.ipp /usr/include/asio/consign.hpp \
  /usr/include/asio/impl/consign.hpp /usr/include/asio/coroutine.hpp \
  /usr/include/asio/deadline_timer.hpp /usr/include/asio/defer.hpp \
  /usr/include/asio/detail/initiate_defer.hpp \
  /usr/include/asio/deferred.hpp /usr/include/asio/impl/deferred.hpp \
  /usr/include/asio/detached.hpp /usr/include/asio/impl/detached.hpp \
- /usr/include/asio/dispatch.hpp /usr/include/asio/error.hpp \
- /usr/include/asio/error_code.hpp /usr/include/asio/execution.hpp \
- /usr/include/asio/execution/allocator.hpp \
- /usr/include/asio/execution/any_executor.hpp \
- /usr/include/asio/execution/blocking.hpp \
- /usr/include/asio/execution/blocking_adaptation.hpp \
- /usr/include/asio/execution/bulk_execute.hpp \
- /usr/include/asio/execution/bulk_guarantee.hpp \
- /usr/include/asio/execution/connect.hpp \
- /usr/include/asio/execution/context.hpp \
- /usr/include/asio/execution/context_as.hpp \
- /usr/include/asio/execution/execute.hpp \
- /usr/include/asio/execution/executor.hpp \
- /usr/include/asio/execution/invocable_archetype.hpp \
- /usr/include/asio/execution/mapping.hpp \
- /usr/include/asio/execution/occupancy.hpp \
- /usr/include/asio/execution/operation_state.hpp \
- /usr/include/asio/execution/outstanding_work.hpp \
- /usr/include/asio/execution/prefer_only.hpp \
- /usr/include/asio/execution/receiver.hpp \
- /usr/include/asio/execution/receiver_invocation_error.hpp \
- /usr/include/asio/execution/relationship.hpp \
- /usr/include/asio/execution/schedule.hpp \
- /usr/include/asio/execution/scheduler.hpp \
- /usr/include/asio/execution/sender.hpp \
- /usr/include/asio/execution/set_done.hpp \
- /usr/include/asio/execution/set_error.hpp \
- /usr/include/asio/execution/set_value.hpp \
- /usr/include/asio/execution/start.hpp \
- /usr/include/asio/execution_context.hpp /usr/include/asio/executor.hpp \
- /usr/include/asio/impl/executor.hpp /usr/include/asio/executor.hpp \
- /usr/include/asio/impl/executor.ipp \
- /usr/include/asio/executor_work_guard.hpp \
- /usr/include/asio/file_base.hpp \
+ /usr/include/asio/executor.hpp /usr/include/asio/impl/executor.hpp \
+ /usr/include/asio/impl/executor.ipp /usr/include/asio/file_base.hpp \
  /usr/include/asio/generic/basic_endpoint.hpp \
  /usr/include/asio/generic/detail/endpoint.hpp \
  /usr/include/asio/generic/detail/impl/endpoint.ipp \
  /usr/include/asio/generic/datagram_protocol.hpp \
- /usr/include/asio/basic_datagram_socket.hpp \
- /usr/include/asio/generic/basic_endpoint.hpp \
  /usr/include/asio/generic/raw_protocol.hpp \
- /usr/include/asio/basic_raw_socket.hpp \
  /usr/include/asio/generic/seq_packet_protocol.hpp \
- /usr/include/asio/basic_seq_packet_socket.hpp \
  /usr/include/asio/generic/stream_protocol.hpp \
- /usr/include/asio/basic_socket_iostream.hpp \
- /usr/include/asio/handler_alloc_hook.hpp \
- /usr/include/asio/handler_continuation_hook.hpp \
- /usr/include/asio/handler_invoke_hook.hpp \
  /usr/include/asio/high_resolution_timer.hpp \
- /usr/include/asio/io_context.hpp /usr/include/asio/io_context_strand.hpp \
+ /usr/include/asio/io_context_strand.hpp \
  /usr/include/asio/detail/strand_service.hpp \
  /usr/include/asio/detail/impl/strand_service.hpp \
  /usr/include/asio/detail/impl/strand_service.ipp \
  /usr/include/asio/io_service.hpp /usr/include/asio/io_service_strand.hpp \
- /usr/include/asio/io_context_strand.hpp /usr/include/asio/ip/address.hpp \
- /usr/include/asio/ip/address_v4.hpp /usr/include/asio/detail/array.hpp \
+ /usr/include/asio/ip/address.hpp /usr/include/asio/ip/address_v4.hpp \
+ /usr/include/asio/detail/array.hpp \
  /usr/include/asio/detail/winsock_init.hpp \
  /usr/include/asio/ip/impl/address_v4.hpp \
  /usr/include/asio/ip/impl/address_v4.ipp \
@@ -673,25 +625,17 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/ip/impl/address_v6.ipp \
  /usr/include/asio/ip/bad_address_cast.hpp \
  /usr/include/asio/ip/impl/address.hpp \
- /usr/include/asio/ip/impl/address.ipp /usr/include/asio/ip/address.hpp \
- /usr/include/asio/ip/address_v4.hpp \
+ /usr/include/asio/ip/impl/address.ipp \
  /usr/include/asio/ip/address_v4_iterator.hpp \
  /usr/include/asio/ip/address_v4_range.hpp \
- /usr/include/asio/ip/address_v4_iterator.hpp \
- /usr/include/asio/ip/address_v6.hpp \
  /usr/include/asio/ip/address_v6_iterator.hpp \
  /usr/include/asio/ip/address_v6_range.hpp \
- /usr/include/asio/ip/address_v6_iterator.hpp \
  /usr/include/asio/ip/network_v4.hpp \
- /usr/include/asio/ip/address_v4_range.hpp \
  /usr/include/asio/ip/impl/network_v4.hpp \
  /usr/include/asio/ip/impl/network_v4.ipp \
- /usr/include/asio/ip/network_v4.hpp /usr/include/asio/ip/network_v6.hpp \
- /usr/include/asio/ip/address_v6_range.hpp \
+ /usr/include/asio/ip/network_v6.hpp \
  /usr/include/asio/ip/impl/network_v6.hpp \
  /usr/include/asio/ip/impl/network_v6.ipp \
- /usr/include/asio/ip/network_v6.hpp \
- /usr/include/asio/ip/bad_address_cast.hpp \
  /usr/include/asio/ip/basic_endpoint.hpp \
  /usr/include/asio/ip/detail/endpoint.hpp \
  /usr/include/asio/ip/detail/impl/endpoint.ipp \
@@ -710,34 +654,21 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/asio/detail/resolve_query_op.hpp \
  /usr/include/asio/detail/resolver_service_base.hpp \
  /usr/include/asio/detail/impl/resolver_service_base.ipp \
- /usr/include/asio/ip/basic_resolver_entry.hpp \
- /usr/include/asio/ip/basic_resolver_iterator.hpp \
- /usr/include/asio/ip/basic_resolver_query.hpp \
  /usr/include/asio/ip/host_name.hpp \
- /usr/include/asio/ip/impl/host_name.ipp \
- /usr/include/asio/ip/host_name.hpp /usr/include/asio/ip/icmp.hpp \
- /usr/include/asio/ip/basic_endpoint.hpp \
- /usr/include/asio/ip/basic_resolver.hpp \
+ /usr/include/asio/ip/impl/host_name.ipp /usr/include/asio/ip/icmp.hpp \
  /usr/include/asio/ip/multicast.hpp \
  /usr/include/asio/ip/detail/socket_option.hpp \
- /usr/include/asio/ip/resolver_base.hpp \
- /usr/include/asio/ip/resolver_query_base.hpp \
- /usr/include/asio/ip/tcp.hpp /usr/include/asio/basic_socket_acceptor.hpp \
- /usr/include/asio/ip/udp.hpp /usr/include/asio/ip/unicast.hpp \
- /usr/include/asio/ip/v6_only.hpp \
- /usr/include/asio/is_applicable_property.hpp \
- /usr/include/asio/is_contiguous_iterator.hpp \
- /usr/include/asio/is_executor.hpp /usr/include/asio/is_read_buffered.hpp \
+ /usr/include/asio/ip/tcp.hpp /usr/include/asio/ip/udp.hpp \
+ /usr/include/asio/ip/unicast.hpp /usr/include/asio/ip/v6_only.hpp \
+ /usr/include/asio/is_read_buffered.hpp \
  /usr/include/asio/is_write_buffered.hpp \
  /usr/include/asio/local/basic_endpoint.hpp \
  /usr/include/asio/local/detail/endpoint.hpp \
  /usr/include/asio/local/detail/impl/endpoint.ipp \
  /usr/include/asio/local/connect_pair.hpp \
- /usr/include/asio/local/basic_endpoint.hpp \
  /usr/include/asio/local/datagram_protocol.hpp \
  /usr/include/asio/local/seq_packet_protocol.hpp \
  /usr/include/asio/local/stream_protocol.hpp \
- /usr/include/asio/multiple_exceptions.hpp \
  /usr/include/asio/packaged_task.hpp /usr/include/asio/detail/future.hpp \
  /usr/include/c++/11/future /usr/include/c++/11/mutex \
  /usr/include/c++/11/bits/std_mutex.h \
@@ -747,67 +678,45 @@ CMakeFiles/tiny-csgo-mirror-system.dir/src/server_emulator.cpp.o: \
  /usr/include/c++/11/bits/std_thread.h /usr/include/asio/placeholders.hpp \
  /usr/include/asio/posix/basic_descriptor.hpp \
  /usr/include/asio/posix/basic_stream_descriptor.hpp \
- /usr/include/asio/posix/basic_descriptor.hpp \
  /usr/include/asio/posix/descriptor.hpp \
- /usr/include/asio/posix/descriptor_base.hpp \
  /usr/include/asio/posix/stream_descriptor.hpp \
- /usr/include/asio/posix/basic_stream_descriptor.hpp \
- /usr/include/asio/post.hpp /usr/include/asio/prefer.hpp \
  /usr/include/asio/prepend.hpp /usr/include/asio/impl/prepend.hpp \
- /usr/include/asio/query.hpp /usr/include/asio/random_access_file.hpp \
- /usr/include/asio/read.hpp /usr/include/asio/impl/read.hpp \
- /usr/include/asio/read_at.hpp /usr/include/asio/impl/read_at.hpp \
- /usr/include/asio/read_until.hpp /usr/include/asio/detail/regex_fwd.hpp \
+ /usr/include/asio/random_access_file.hpp /usr/include/asio/read.hpp \
+ /usr/include/asio/impl/read.hpp /usr/include/asio/read_at.hpp \
+ /usr/include/asio/impl/read_at.hpp /usr/include/asio/read_until.hpp \
+ /usr/include/asio/detail/regex_fwd.hpp \
  /usr/include/asio/impl/read_until.hpp \
- /usr/include/asio/buffers_iterator.hpp \
- /usr/include/asio/readable_pipe.hpp \
- /usr/include/asio/recycling_allocator.hpp \
- /usr/include/asio/redirect_error.hpp \
+ /usr/include/asio/readable_pipe.hpp /usr/include/asio/redirect_error.hpp \
  /usr/include/asio/impl/redirect_error.hpp \
- /usr/include/asio/registered_buffer.hpp /usr/include/asio/require.hpp \
  /usr/include/asio/require_concept.hpp \
  /usr/include/asio/traits/require_concept_member.hpp \
  /usr/include/asio/traits/require_concept_free.hpp \
  /usr/include/asio/traits/static_require_concept.hpp \
- /usr/include/asio/serial_port.hpp \
- /usr/include/asio/basic_serial_port.hpp \
- /usr/include/asio/serial_port_base.hpp /usr/include/asio/signal_set.hpp \
- /usr/include/asio/basic_signal_set.hpp \
- /usr/include/asio/signal_set_base.hpp /usr/include/asio/socket_base.hpp \
+ /usr/include/asio/serial_port.hpp /usr/include/asio/signal_set.hpp \
  /usr/include/asio/static_thread_pool.hpp \
  /usr/include/asio/thread_pool.hpp /usr/include/asio/impl/thread_pool.hpp \
  /usr/include/asio/detail/blocking_executor_op.hpp \
  /usr/include/asio/detail/bulk_executor_op.hpp \
- /usr/include/asio/impl/thread_pool.ipp \
- /usr/include/asio/steady_timer.hpp /usr/include/asio/strand.hpp \
+ /usr/include/asio/impl/thread_pool.ipp /usr/include/asio/strand.hpp \
  /usr/include/asio/detail/strand_executor_service.hpp \
  /usr/include/asio/detail/impl/strand_executor_service.hpp \
- /usr/include/asio/defer.hpp \
  /usr/include/asio/detail/impl/strand_executor_service.ipp \
  /usr/include/asio/stream_file.hpp /usr/include/asio/streambuf.hpp \
- /usr/include/asio/basic_streambuf.hpp \
- /usr/include/asio/system_context.hpp /usr/include/asio/system_error.hpp \
- /usr/include/asio/system_executor.hpp /usr/include/asio/system_timer.hpp \
- /usr/include/asio/this_coro.hpp /usr/include/asio/thread.hpp \
- /usr/include/asio/thread_pool.hpp /usr/include/asio/time_traits.hpp \
+ /usr/include/asio/system_timer.hpp /usr/include/asio/this_coro.hpp \
+ /usr/include/asio/thread.hpp /usr/include/asio/time_traits.hpp \
  /usr/include/asio/use_awaitable.hpp /usr/include/asio/use_future.hpp \
- /usr/include/asio/impl/use_future.hpp \
- /usr/include/asio/packaged_task.hpp /usr/include/asio/uses_executor.hpp \
- /usr/include/asio/version.hpp /usr/include/asio/wait_traits.hpp \
+ /usr/include/asio/impl/use_future.hpp /usr/include/asio/version.hpp \
  /usr/include/asio/windows/basic_object_handle.hpp \
  /usr/include/asio/windows/basic_overlapped_handle.hpp \
  /usr/include/asio/windows/basic_random_access_handle.hpp \
- /usr/include/asio/windows/basic_overlapped_handle.hpp \
  /usr/include/asio/windows/basic_stream_handle.hpp \
  /usr/include/asio/windows/object_handle.hpp \
  /usr/include/asio/windows/overlapped_handle.hpp \
  /usr/include/asio/windows/overlapped_ptr.hpp \
  /usr/include/asio/windows/random_access_handle.hpp \
  /usr/include/asio/windows/stream_handle.hpp \
- /usr/include/asio/writable_pipe.hpp /usr/include/asio/write.hpp \
- /usr/include/asio/write_at.hpp /usr/include/asio/impl/write_at.hpp \
- /usr/include/c++/11/thread /usr/include/c++/11/bits/this_thread_sleep.h \
- /home/sprut/qwin/include/utils.h \
+ /usr/include/asio/writable_pipe.hpp /usr/include/asio/write_at.hpp \
+ /usr/include/asio/impl/write_at.hpp /home/sprut/qwin/include/utils.h \
  /home/sprut/qwin/include/nlohmann/json.hpp \
  /usr/include/c++/11/forward_list /usr/include/c++/11/bits/forward_list.h \
  /usr/include/c++/11/bits/forward_list.tcc /usr/include/c++/11/map \
