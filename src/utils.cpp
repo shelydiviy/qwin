@@ -22,7 +22,7 @@ void logMessage(const std::string& message, const std::string& logBaseName) {
 
     std::ofstream log(logFile, std::ios::app);
     if (!log.is_open()) {
-        std::cerr << "Failed to open log file: " << logFile << std::endl;
+        std::cerr << "Не удалось открыть файл логов: " << logFile << std::endl;
         return;
     }
 
@@ -37,7 +37,7 @@ void logMessage(const std::string& message, const std::string& logBaseName) {
 Config loadConfig(const std::string& configPath) {
     std::ifstream file(configPath);
     if (!file.is_open()) {
-        throw std::runtime_error("Failed to open config file: " + configPath);
+        throw std::runtime_error("Не удалось открыть конфигурационный файл: " + configPath);
     }
 
     nlohmann::json jsonConfig;
@@ -59,7 +59,7 @@ Config loadConfig(const std::string& configPath) {
         }
     }
 
-    logMessage("Configuration loaded: " + config.serverIp + ":" + std::to_string(config.serverPortStart) +
+    logMessage("Конфигурация загружена: " + config.serverIp + ":" + std::to_string(config.serverPortStart) +
                " -> " + config.remoteServerIp + ":" + std::to_string(config.remoteServerPort), "system");
 
     return config;
@@ -72,29 +72,26 @@ bool isIpBlocked(const std::string& ip,
                  int blockDurationSeconds) {
     auto now = std::chrono::steady_clock::now();
 
-    // Проверяем, является ли IP исключённым
     if (std::find(excludedIps.begin(), excludedIps.end(), ip) != excludedIps.end()) {
-        logMessage("Excluded IP: " + ip, "proxy");
+        logMessage("Исключённый IP: " + ip, "proxy");
         return false;
     }
 
-    // Удаляем устаревшие записи
     for (auto it = ipMap.begin(); it != ipMap.end(); ) {
         if (std::chrono::duration_cast<std::chrono::seconds>(now - it->second.second).count() > blockDurationSeconds) {
-            logMessage("Removing expired entry for IP: " + it->first, "proxy");
+            logMessage("Удаление устаревшей записи для IP: " + it->first, "proxy");
             it = ipMap.erase(it);
         } else {
             ++it;
         }
     }
 
-    // Проверяем текущий IP
     if (ipMap.find(ip) == ipMap.end()) {
         return false;
     }
 
     if (ipMap[ip].first >= maxConnections) {
-        logMessage("IP blocked: " + ip, "error");
+        logMessage("IP заблокирован: " + ip, "error");
         return true;
     }
 
@@ -104,11 +101,9 @@ bool isIpBlocked(const std::string& ip,
 void addIpConnection(const std::string& ip, 
                      std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, 
                      const std::vector<std::string>& excludedIps, 
-                     int maxConnections, 
-                     int blockDurationSeconds) {
-    // Проверяем, является ли IP исключённым
+                     int maxConnections) {
     if (std::find(excludedIps.begin(), excludedIps.end(), ip) != excludedIps.end()) {
-        logMessage("Excluded IP: " + ip, "proxy");
+        logMessage("Исключённый IP: " + ip, "proxy");
         return;
     }
 
@@ -116,13 +111,13 @@ void addIpConnection(const std::string& ip,
 
     if (ipMap.find(ip) == ipMap.end()) {
         ipMap[ip] = {1, now};
-        logMessage("New connection from IP: " + ip, "proxy");
+        logMessage("Новое подключение от IP: " + ip, "proxy");
         totalConnections++;
     } else {
         if (ipMap[ip].first < maxConnections) {
             ipMap[ip].first++;
             ipMap[ip].second = now;
-            logMessage("Incremented connection count for IP: " + ip, "proxy");
+            logMessage("Увеличено количество подключений для IP: " + ip, "proxy");
             totalConnections++;
         }
     }

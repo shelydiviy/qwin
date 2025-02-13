@@ -18,7 +18,7 @@ private:
     int endPort;
     std::string remoteServerIp;
     int remoteServerPort;
-    Config config; // Храним конфигурацию
+    Config config;
 
     asio::io_context ioContext;
     std::vector<asio::ip::udp::socket> sockets;

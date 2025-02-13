@@ -8,15 +8,15 @@
 #include <atomic>
 
 struct Config {
-    std::string serverIp; // IP-адрес сервера
-    int serverPortStart;  // Начальный порт для серверов
-    int serverPortEnd;    // Конечный порт для серверов
-    std::string remoteServerIp; // IP удалённого сервера
-    int remoteServerPort;      // Порт удалённого сервера
-    std::string logDirectory;  // Директория для логов
-    int maxConnectionsPerIp;   // Максимальное количество подключений с одного IP
-    int blockDurationMinutes;  // Время блокировки IP (в минутах)
-    std::vector<std::string> excludedIps; // Список исключённых IP
+    std::string serverIp;
+    int serverPortStart;
+    int serverPortEnd;
+    std::string remoteServerIp;
+    int remoteServerPort;
+    std::string logDirectory;
+    int maxConnectionsPerIp;
+    int blockDurationMinutes;
+    std::vector<std::string> excludedIps;
 };
 
 std::string getLogFileName(const std::string& baseName);
@@ -32,8 +32,7 @@ bool isIpBlocked(const std::string& ip,
 void addIpConnection(const std::string& ip, 
                      std::unordered_map<std::string, std::pair<int, std::chrono::steady_clock::time_point>>& ipMap, 
                      const std::vector<std::string>& excludedIps, 
-                     int maxConnections, 
-                     int blockDurationSeconds);
+                     int maxConnections);
 
 extern std::atomic<int> totalConnections;
 extern std::atomic<int> blockedConnections;

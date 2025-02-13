@@ -3,7 +3,7 @@
 #include <thread>
 #include <chrono>
 
-// Конструктор с конфигурацией
+// Конструктор
 ServerEmulator::ServerEmulator(const std::string& ipParam, int portParam, const Config& configParam)
     : ip(ipParam), port(portParam), bound(false), config(configParam),
       ioContext(), socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), portParam)) {}
@@ -14,7 +14,7 @@ bool ServerEmulator::isBound() const {
 
 void ServerEmulator::listenForConnections() {
     try {
-        logMessage("Listening on " + ip + ":" + std::to_string(port), "server");
+        logMessage("Сервер слушает порт " + ip + ":" + std::to_string(port), "server");
 
         ioContext.run();
 
@@ -23,7 +23,7 @@ void ServerEmulator::listenForConnections() {
             std::this_thread::sleep_for(std::chrono::seconds(60)); // Отправляем информацию каждые 60 секунд
         }
     } catch (const std::exception& e) {
-        logMessage("Error in server on port " + std::to_string(port) + ": " + std::string(e.what()), "error");
+        logMessage("Ошибка в работе сервера на порту " + std::to_string(port) + ": " + std::string(e.what()), "error");
     }
 }
 
@@ -39,7 +39,7 @@ void ServerEmulator::sendMasterServerInfo() {
 }
 
 void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterPort) {
-    logMessage("Sending info to Master Server at " + masterIp + ":" + std::to_string(masterPort), "server");
+    logMessage("Отправка информации на Master Server: " + masterIp + ":" + std::to_string(masterPort), "server");
 
     try {
         struct MasterPacket {
@@ -49,7 +49,7 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
             uint8_t serverType = 'd'; // Тип сервера (dedicated/internet server)
             uint8_t platform = 'l'; // Платформа (Linux)
             char gameDir[56] = "cstrike"; // Название директории игры
-            char description[64] = "CS 1.6 Dedicated Mirror Server | CSDM | Sentry+Laser"; // Описание сервера
+            char description[64] = "CS 1.6 Зеркальный Сервер | CSDM | Sentry+Laser"; // Описание сервера
             char mapName[16] = "de_dust2"; // Имя карты
             char gameName[16] = "Counter-Strike"; // Название игры
             uint8_t players = 0; // Количество игроков
@@ -69,8 +69,8 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
         asio::ip::udp::endpoint endpoint = *resolver.resolve(masterIp, std::to_string(masterPort)).begin();
 
         socket.send_to(asio::buffer(buffer), endpoint);
-        logMessage("Successfully sent info to Master Server", "server");
+        logMessage("Информация успешно отправлена на Master Server", "server");
     } catch (const std::exception& e) {
-        logMessage("Failed to send data to Master Server: " + std::string(e.what()), "error");
+        logMessage("Не удалось отправить данные на Master Server: " + std::string(e.what()), "error");
     }
 }

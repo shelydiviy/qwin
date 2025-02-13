@@ -9,7 +9,7 @@
 int main(int argc, char* argv[]) {
     try {
         if (argc < 2) {
-            std::cerr << "Usage: " << argv[0] << " --config <path_to_config>" << std::endl;
+            std::cerr << "Использование: " << argv[0] << " --config <путь_к_конфигу>" << std::endl;
             return 1;
         }
 
@@ -23,25 +23,25 @@ int main(int argc, char* argv[]) {
 
         Config config = loadConfig(configPath);
 
-        logMessage("System started with configuration: " + config.serverIp + ":" + std::to_string(config.serverPortStart) +
+        logMessage("Система запущена с конфигурацией: " + config.serverIp + ":" + std::to_string(config.serverPortStart) +
                    " -> " + config.remoteServerIp + ":" + std::to_string(config.remoteServerPort), "system");
 
         std::vector<std::thread> serverThreads;
 
         for (int port = config.serverPortStart; port <= config.serverPortEnd; ++port) {
             try {
-                logMessage("Creating server on port " + std::to_string(port), "system");
-                ServerEmulator server(config.serverIp, port, config); // Передаём конфигурацию
+                logMessage("Создание сервера на порту " + std::to_string(port), "system");
+                ServerEmulator server(config.serverIp, port, config);
 
                 if (!server.isBound()) {
-                    logMessage("Failed to bind to port " + std::to_string(port), "error");
+                    logMessage("Не удалось привязаться к порту " + std::to_string(port), "error");
                     continue;
                 }
 
                 serverThreads.emplace_back(std::thread(&ServerEmulator::listenForConnections, &server));
-                logMessage("Server thread started on port " + std::to_string(port), "server");
+                logMessage("Сервер запущен на порту " + std::to_string(port), "server");
             } catch (const std::exception& e) {
-                logMessage("Error creating server on port " + std::to_string(port) + ": " + std::string(e.what()), "error");
+                logMessage("Ошибка создания сервера на порту " + std::to_string(port) + ": " + std::string(e.what()), "error");
             }
         }
 
@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
         std::thread proxyThread(&UdpProxy::startProxy, &proxy);
 
         while (true) {
-            logMessage("System statistics: Total connections = " + std::to_string(totalConnections.load()) +
-                       ", Blocked connections = " + std::to_string(blockedConnections.load()), "system");
+            logMessage("Статистика системы: Общее количество подключений = " + std::to_string(totalConnections.load()) +
+                       ", Заблокированные подключения = " + std::to_string(blockedConnections.load()), "system");
             std::this_thread::sleep_for(std::chrono::minutes(1));
         }
 
@@ -62,10 +62,10 @@ int main(int argc, char* argv[]) {
 
         proxyThread.join();
 
-        logMessage("System stopped.", "system");
+        logMessage("Система остановлена.", "system");
     } catch (const std::exception& e) {
-        logMessage("Critical error: " + std::string(e.what()), "error");
-        std::cerr << "Critical error: " << e.what() << std::endl;
+        logMessage("Критическая ошибка: " + std::string(e.what()), "error");
+        std::cerr << "Критическая ошибка: " << e.what() << std::endl;
         return 1;
     }
 
