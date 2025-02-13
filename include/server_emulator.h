@@ -3,10 +3,11 @@
 
 #include <string>
 #include <asio.hpp>
+#include "utils.h" // Подключаем utils.h для Config
 
 class ServerEmulator {
 public:
-    ServerEmulator(const std::string& ipParam, int portParam, const Config& configParam);
+    ServerEmulator(const std::string& ipParam, int portParam, const Config& configParam); // Конструктор с Config
     void listenForConnections();
     bool isBound() const;
 
@@ -14,7 +15,7 @@ private:
     std::string ip;
     int port;
     bool bound = false;
-    Config config;
+    Config config; // Храним конфигурацию
 
     asio::io_context ioContext;
     asio::ip::udp::socket socket;
