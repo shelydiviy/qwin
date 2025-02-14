@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <chrono>
 
-// Конструктор
-UdpProxy::UdpProxy(int startPortParam, int endPortParam, const std::string& remoteIpParam, int remotePortParam, const Config& configParam)
-    : startPort(startPortParam), endPort(endPortParam), remoteServerIp(remoteIpParam), remoteServerPort(remotePortParam), config(configParam),
+// Конструктор с переименованными параметрами
+UdpProxy::UdpProxy(int startPortNum, int endPortNum, const std::string& remoteIpAddr, int remotePortNum, const Config& configData)
+    : startPort(startPortNum), endPort(endPortNum), remoteServerIp(remoteIpAddr), remoteServerPort(remotePortNum), config(configData),
       clientEndpoint(), buffer() {}
 
 void UdpProxy::startProxy() {
@@ -32,8 +32,8 @@ void UdpProxy::startProxy() {
                     if (!ecOuter) {
                         sockets[port - startPort].async_receive_from(
                             asio::buffer(buffer), clientEndpoint,
-                            [this, port](std::error_code ecInner, std::size_t bytesReceivedInner) {
-                                if (!ecInner && bytesReceivedInner > 0) {
+                            [this, port](std::error_code ecInner, [[maybe_unused]] std::size_t bytesReceivedInner) {
+                                if (!ecInner) {
                                     handleIncomingPacket(sockets[port - startPort], bytesReceivedInner);
                                 } else if (ecInner != asio::error::operation_aborted) {
                                     logMessage("Ошибка приёма пакета на порту " + std::to_string(port) + ": " + ecInner.message(), "error");
@@ -62,7 +62,7 @@ void UdpProxy::handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t b
         return;
     }
 
-    addIpConnection(clientIp, ipMap, config.excludedIps, config.maxConnectionsPerIp, config.blockDurationMinutes * 60);
+    addIpConnection(clientIp, ipMap, config.excludedIps, config.maxConnectionsPerIp);
 
     logMessage("Получен пакет от клиента " + clientIp + ":" + std::to_string(clientPort), "proxy");
 
@@ -72,7 +72,7 @@ void UdpProxy::handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t b
 
         socket.async_send_to(
             asio::buffer(buffer, bytesReceived), remoteEndpoint,
-            [clientIp](std::error_code ec) { // Убираем unused parameter
+            [clientIp](std::error_code ec, [[maybe_unused]] std::size_t /*bytesSent*/) { // Убираем unused parameter
                 if (ec) {
                     logMessage("Ошибка отправки пакета клиенту " + clientIp + ": " + ec.message(), "error");
                 }

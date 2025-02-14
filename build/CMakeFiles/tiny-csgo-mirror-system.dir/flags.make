@@ -6,5 +6,5 @@ CXX_DEFINES = -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB
 
 CXX_INCLUDES = -I/home/sprut/qwin/include
 
-CXX_FLAGS = -std=c++17 -Wall -Wextra -Wshadow -O2
+CXX_FLAGS = -std=gnu++17
 

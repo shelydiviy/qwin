@@ -48,6 +48,8 @@ int main(int argc, char* argv[]) {
         UdpProxy proxy(config.serverPortStart, config.serverPortEnd, config.remoteServerIp, config.remoteServerPort, config);
         std::thread proxyThread(&UdpProxy::startProxy, &proxy);
 
+        logMessage("Система работает. Для завершения нажмите Ctrl+C", "system");
+
         while (true) {
             logMessage("Статистика системы: Общее количество подключений = " + std::to_string(totalConnections.load()) +
                        ", Заблокированные подключения = " + std::to_string(blockedConnections.load()), "system");

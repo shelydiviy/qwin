@@ -3,10 +3,17 @@
 #include <thread>
 #include <chrono>
 
-// Конструктор
-ServerEmulator::ServerEmulator(const std::string& ipParam, int portParam, const Config& configParam)
-    : ip(ipParam), port(portParam), bound(false), config(configParam),
-      ioContext(), socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), portParam)) {}
+// Конструктор с переименованными параметрами
+ServerEmulator::ServerEmulator(const std::string& ipAddr, int portNum, const Config& configData)
+    : ip(ipAddr), port(portNum), bound(false), config(configData),
+      socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), portNum)) {
+    if (socket.is_open()) {
+        logMessage("Сервер успешно создан и привязан к порту " + ip + ":" + std::to_string(port), "server");
+        bound = true;
+    } else {
+        logMessage("Не удалось создать сервер на порту " + std::to_string(port), "error");
+    }
+}
 
 bool ServerEmulator::isBound() const {
     return bound;
@@ -16,12 +23,17 @@ void ServerEmulator::listenForConnections() {
     try {
         logMessage("Сервер слушает порт " + ip + ":" + std::to_string(port), "server");
 
-        ioContext.run();
+        // Запуск io_context в отдельном потоке
+        std::thread ioThread([this]() {
+            ioContext.run();
+        });
 
         while (true) {
             sendMasterServerInfo();
             std::this_thread::sleep_for(std::chrono::seconds(60)); // Отправляем информацию каждые 60 секунд
         }
+
+        ioThread.join();
     } catch (const std::exception& e) {
         logMessage("Ошибка в работе сервера на порту " + std::to_string(port) + ": " + std::string(e.what()), "error");
     }
@@ -65,12 +77,13 @@ void ServerEmulator::sendToMasterServer(const std::string& masterIp, int masterP
         std::vector<uint8_t> buffer(sizeof(MasterPacket));
         memcpy(buffer.data(), &packet, sizeof(MasterPacket));
 
-        asio::ip::udp::resolver resolver(ioContext);
+        asio::ip::udp::resolver resolver(ioContext); // Используем ioContext
         asio::ip::udp::endpoint endpoint = *resolver.resolve(masterIp, std::to_string(masterPort)).begin();
 
         socket.send_to(asio::buffer(buffer), endpoint);
-        logMessage("Информация успешно отправлена на Master Server", "server");
+        logMessage("Информация успешно отправлена на Master Server: " + masterIp + ":" + std::to_string(masterPort), "server");
     } catch (const std::exception& e) {
-        logMessage("Не удалось отправить данные на Master Server: " + std::string(e.what()), "error");
+        logMessage("Не удалось отправить данные на Master Server: " + masterIp + ":" + std::to_string(masterPort) +
+                   ". Ошибка: " + std::string(e.what()), "error");
     }
 }

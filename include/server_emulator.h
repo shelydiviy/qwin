@@ -3,11 +3,11 @@
 
 #include <string>
 #include <asio.hpp>
-#include "utils.h" // Подключаем utils.h для Config
+#include "utils.h" // Для Config
 
 class ServerEmulator {
 public:
-    ServerEmulator(const std::string& ipParam, int portParam, const Config& configParam); // Конструктор с Config
+    ServerEmulator(const std::string& ipAddr, int portNum, const Config& configData);
     void listenForConnections();
     bool isBound() const;
 
