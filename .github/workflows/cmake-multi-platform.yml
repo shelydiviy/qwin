@@ -2,9 +2,9 @@ name: CMake on Ubuntu
 
 on:
   push:
-    branches: [ "0.7" ]
+    branches: [ "0.6" ]
   pull_request:
-    branches: [ "0.7" ]
+    branches: [ "0.6" ]
 
 jobs:
   build:
