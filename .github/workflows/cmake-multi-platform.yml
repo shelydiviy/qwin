@@ -20,6 +20,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up CMake
+      uses: lukka/run-cmake@v0.0.9
+      with:
+        cmake-version: '3.28.3'
+
     - name: Set reusable strings
       id: strings
       shell: bash
