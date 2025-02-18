@@ -8,8 +8,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Поиск библиотеки Boost
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
+# Поиск библиотеки Asio
+find_package(Asio REQUIRED)
+
 # Добавление директории include для заголовочных файлов
 include_directories(include)
+
+# Добавляем пути к Asio, если используется заголовочная-only версия
+if(NOT ASIO_FOUND)
+    include_directories(third_party/asio/include)
+endif()
 
 # Создание исполняемого файла
 add_executable(qwin
@@ -17,12 +25,7 @@ add_executable(qwin
     src/server_emulator.cpp
     src/udp_proxy.cpp
     src/utils.cpp
-    src/steam.cpp  # Добавляем новый файл steam.cpp, если он существует
 )
 
-# Связывание с библиотекой Boost
-target_link_libraries(qwin PRIVATE Boost::system Boost::filesystem)
-
-# Если используются дополнительные зависимости (например, Asio), их нужно указать здесь
-# find_package(Asio REQUIRED)
-# target_link_libraries(qwin PRIVATE Asio::asio)
+# Связывание с библиотеками
+target_link_libraries(qwin PRIVATE Boost::system Boost::filesystem Asio::asio)
