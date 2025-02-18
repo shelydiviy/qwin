@@ -1,0 +1,209 @@
+diff --git a/include/server_emulator.h b/include/server_emulator.h
+--- a/include/server_emulator.h
++++ b/include/server_emulator.h
+@@ -8,7 +8,7 @@
+ #include "utils.h"
+ 
+ class ServerEmulator {
+-public:
++public:
+     ServerEmulator(const std::string& ipAddr, int portNum, const Config& configData);
+     ~ServerEmulator();
+ 
+@@ -16,6 +16,7 @@ private:
+     bool bound = false;
+     Config config;
+ 
++    asio::io_context& ioContext;
+     asio::ip::udp::socket socket;
+ 
+     void sendMasterServerInfo();
+diff --git a/src/server_emulator.cpp b/src/server_emulator.cpp
+--- a/src/server_emulator.cpp
++++ b/src/server_emulator.cpp
+@@ -5,6 +5,7 @@
+ #include <thread>
+ #include <chrono>
+ 
++ServerEmulator::ServerEmulator(const std::string& ipAddrParam, int portNumParam, asio::io_context& ioContextParam, const Config& configParam)
++    : ip(ipAddrParam), port(portNumParam), ioContext(ioContextParam), config(configParam) {
+ ServerEmulator::ServerEmulator(const std::string& ip, int port, const Config& configData)
+     : ip(ip), port(port), config(configData) {
+     try {
+@@ -13,6 +14,7 @@ ServerEmulator::ServerEmulator(const std::string& ip, int port, const Config& con
+         logMessage("Не удалось создать сервер на порту " + std::to_string(port), "error");
+     }
+ 
++    socket = asio::ip::udp::socket(ioContext, asio::ip::udp::endpoint(asio::ip::udp::v4(), port));
+     if (socket.is_open()) {
+         logMessage("Сервер успешно создан и привязан к порту " + ip + ":" + std::to_string(port), "server");
+         bound = true;
+@@ -20,6 +22,7 @@ ServerEmulator::ServerEmulator(const std::string& ip, int port, const Config& con
+ 
+ ServerEmulator::~ServerEmulator() {
+     if (socket.is_open()) {
++        socket.close();
+         logMessage("Сервер на порту " + std::to_string(port) + " остановлен", "server");
+     }
+ }
+@@ -32,7 +35,7 @@ void ServerEmulator::listenForConnections() {
+             [this]() {
+                 while (true) {
+                     sendMasterServerInfo();
+-                    std::this_thread::sleep_for(std::chrono::minutes(1));
++                    std::this_thread::sleep_for(std::chrono::minutes(1)); // Задержка между отправками информации мастеру
+                 }
+             });
+     } catch (const std::exception& e) {
+diff --git a/include/udp_proxy.h b/include/udp_proxy.h
+--- a/include/udp_proxy.h
++++ b/include/udp_proxy.h
+@@ -19,6 +19,7 @@
+     int endPort;
+     std::string remoteServerIp;
+     int remoteServerPort;
++    Config config;
+ 
+     asio::io_context& ioContext;
+     std::vector<asio::ip::udp::socket> sockets;
+@@ -30,7 +31,7 @@ private:
+     void handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t bytesReceived);
+ };
+ 
+-UdpProxy::UdpProxy(int startPort, int endPort, const std::string& remoteIp, int remotePort, const Config& configData)
++UdpProxy::UdpProxy(int startPortParam, int endPortParam, const std::string& remoteIpParam, int remotePortParam, asio::io_context& ioContextParam, const Config& configData)
+     : startPort(startPortParam), endPort(endPortParam), remoteServerIp(remoteIpParam), remoteServerPort(remotePortParam), config(configData) {
+     for (int port = startPort; port <= endPort; ++port) {
+         try {
+@@ -40,6 +41,7 @@ UdpProxy::UdpProxy(int startPort, int endPort, const std::string& remoteIp, int r
+             logMessage("Ошибка создания UDP Proxy для порта " + std::to_string(port) + ": " + e.what(), "error");
+         }
+     }
++    ioContext = ioContextParam;
+ }
+ 
+ UdpProxy::~UdpProxy() {
+diff --git a/src/udp_proxy.cpp b/src/udp_proxy.cpp
+--- a/src/udp_proxy.cpp
++++ b/src/udp_proxy.cpp
+@@ -30,7 +30,7 @@ void UdpProxy::handleIncomingPacket(asio::ip::udp::socket& socket, std::size_t b
+         auto clientIp = clientEndpoint.address().to_string();
+         if (!isIpBlocked(clientIp, ipMap, config.excludedIps, config.maxConnectionsPerIp, config.blockDurationMinutes * 60)) {
+             addIpConnection(clientIp, ipMap, config.excludedIps, config.maxConnectionsPerIp);
+-            socket.async_send_to(asio::buffer(buffer, bytesReceived), remoteEndpoint,
++            socket.async_send_to(asio::buffer(buffer, bytesReceivedOuter), remoteEndpoint,
+                                 [clientIp](std::error_code ec, [[maybe_unused]] std::size_t /*bytesSent*/) {
+                                     if (ec) {
+                                         logMessage("Ошибка отправки пакета клиенту " + clientIp + ": " + ec.message(), "error");
+diff --git a/src/main.cpp b/src/main.cpp
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -4,6 +4,7 @@
+ #include "server_emulator.h"
+ #include "udp_proxy.h"
+ #include "utils.h"
++#include <memory>
+ #include <iostream>
+ #include <thread>
+ #include <vector>
+@@ -16,6 +17,23 @@
+     return loadConfig(configPath);
+ }
+ 
++class ThreadPool {
++public:
++    ThreadPool(std::size_t threadsCount) : ioContext(), workers(threadsCount) {
++        for (std::size_t i = 0; i < threadsCount; ++i) {
++            workers.emplace_back([this]() { ioContext.run(); });
++        }
++    }
++
++    ~ThreadPool() {
++        ioContext.stop();
++        for (auto& worker : workers) {
++            if (worker.joinable()) {
++                worker.join();
++            }
++        }
++    }
++
++    asio::io_context& getIoContext() { return ioContext; }
++
+ int main(int argc, char* argv[]) {
+     try {
+         if (argc < 2) {
+@@ -26,13 +44,14 @@ int main(int argc, char* argv[]) {
+         Config config = loadConfig(configPath);
+ 
+         std::vector<std::unique_ptr<ServerEmulator>> servers;
+-        for (int port = config.serverPortStart; port <= config.serverPortEnd; ++port) {
++        ThreadPool pool(std::thread::hardware_concurrency());
++        asio::io_context& ioContext = pool.getIoContext();
++
++        for (int portNum = config.serverPortStart; portNum <= config.serverPortEnd; ++portNum) {
+             try {
+-                logMessage("Создание сервера на порту " + std::to_string(port), "system");
+-                servers.emplace_back(std::make_unique<ServerEmulator>(config.serverIp, port, config));
++                logMessage("Создание сервера на порту " + std::to_string(portNum), "system");
++                servers.emplace_back(std::make_unique<ServerEmulator>(config.serverIp, portNum, ioContext, config));
+ 
+-                if (!servers.back()->isBound()) {
+-                    logMessage("Не удалось привязаться к порту " + std::to_string(port), "error");
++                if (!servers.back()->isBound()) logMessage("Не удалось привязаться к порту " + std::to_string(portNum), "error");
+                 else {
+                     logMessage("Сервер запущен на порту " + std::to_string(port), "server");
+                 }
+@@ -40,12 +59,10 @@ int main(int argc, char* argv[]) {
+             }
+         }
+ 
+-        // Запускаем все потоки
+-        for (auto& server : servers) {
+-            server->listenForConnections();
+-        }
+-
+-        logMessage("Система работает. Для завершения нажмите Ctrl+C", "system");
++        // Создаем и запускаем UDP Proxy
++        UdpProxy proxy(config.serverPortStart, config.serverPortEnd, config.remoteServerIp, config.remoteServerPort, ioContext, config);
++        proxy.startProxy();
++
++        pool.getIoContext().run(); // Ждём завершения работы пула потоков
+ 
+     } catch (const std::exception& e) {
+         logMessage("Критическая ошибка: " + std::string(e.what()), "error");
+diff --git a/include/thread_pool.h b/include/thread_pool.h
+new file mode 100644
+--- /dev/null
++++ b/include/thread_pool.h
+@@ -0,0 +1,25 @@
++#ifndef THREAD_POOL_H
++#define THREAD_POOL_H
++
++#include <asio.hpp>
++#include <vector>
++
++class ThreadPool {
++public:
++    ThreadPool(std::size_t threadsCount) : ioContext(), workers(threadsCount) {
++        for (std::size_t i = 0; i < threadsCount; ++i) {
++            workers.emplace_back([this]() { ioContext.run(); });
++        }
++    }
++
++    ~ThreadPool() {
++        ioContext.stop();
++        for (auto& worker : workers) {
++            if (worker.joinable()) {
++                worker.join();
++            }
++        }
++    }
++
++    asio::io_context& getIoContext() { return ioContext; }
++
++private:
++    asio::io_context ioContext;
++    std::vector<std::thread> workers;
++};
++
++#endif // THREAD_POOL_H
