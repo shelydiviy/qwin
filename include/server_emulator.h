@@ -13,6 +13,7 @@ public:
 
 private:
     std::string ip;
+    asio::io_context& ioContext;
     int port;
     bool bound = false;
     Config config; // Храним конфигурацию

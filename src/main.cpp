@@ -3,6 +3,7 @@
 #include "steam.h"
 #include <thread>
 #include <vector>
+#include <memory>
 #include <asio.hpp>
 
 void worker(asio::io_context& ioContext) {

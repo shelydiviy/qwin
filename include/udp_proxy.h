@@ -11,6 +11,7 @@
 class UdpProxy {
 public:
     UdpProxy(int startPortParam, int endPortParam, const std::string& remoteIpParam, int remotePortParam, const Config& configParam);
+    ~UdpProxy();
     void startProxy();
 
 private:
