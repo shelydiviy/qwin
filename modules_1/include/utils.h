@@ -2,7 +2,6 @@
 #define UTILS_H
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 #include <asio.hpp>
 
@@ -17,20 +16,25 @@ struct Config {
     int players;
     int maxPlayers;
     int protocolVersion;
-    std::vector<std::string> excludedIps;
-    int maxConnectionsPerIp;
-    int blockDurationMinutes;
+    std::vector<std::string> playersList; // Добавляем список игроков
 };
 
-// Функции для работы с IP-адресами
-void addIpConnection(const std::string& ip, std::unordered_map<std::string, std::pair<int, time_t>>& ipMap,
-                     const std::vector<std::string>& excludedIps, int maxConnections, int blockDurationSeconds);
+// Логирование сообщений
+void logMessage(const std::string& message, const std::string& level);
 
-bool isIpBlocked(const std::string& ip, const std::unordered_map<std::string, std::pair<int, time_t>>& ipMap,
-                 const std::vector<std::string>& excludedIps, int maxConnections, int blockDurationSeconds);
+// Создание пакета S2M_PING
+size_t createMasterServerPacket(uint8_t* buffer, size_t bufferSize,
+                                const std::string& serverIp, int serverPort,
+                                const std::string& serverName, const std::string& mapName,
+                                int players, int maxPlayers, int protocolVersion);
 
-// Функции для создания пакетов
-size_t createMasterServerPacket(uint8_t* buffer, size_t bufferSize, const std::string& serverIp, int serverPort,
-                               const std::string& serverName, const std::string& mapName, int players, int maxPlayers, int protocolVersion);
+// Создание пакета A2S_INFO
+size_t createA2SInfoPacket(uint8_t* buffer, size_t bufferSize,
+                          const std::string& serverName, const std::string& mapName,
+                          int players, int maxPlayers, int protocolVersion);
+
+// Создание пакета A2S_PLAYER
+size_t createA2SPlayerPacket(uint8_t* buffer, size_t bufferSize,
+                            const std::vector<std::string>& playersList);
 
 #endif // UTILS_H
