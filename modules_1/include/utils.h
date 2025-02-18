@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
 
 struct Config {
     std::string serverIp;

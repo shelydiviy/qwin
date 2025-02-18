@@ -21,28 +21,11 @@ int main(int argc, char* argv[]) {
     }
 
     std::string configPath = argv[2];
-    Config config = loadConfig(configPath);
+    Config config = loadConfig(configPath); // Убедитесь, что функция loadConfig определена
 
     asio::io_context ioContext;
 
     std::vector<std::unique_ptr<ServerEmulator>> servers;
     for (int port = config.serverPortStart; port <= config.serverPortEnd; ++port) {
         try {
-            logMessage("Создание сервера на порту " + std::to_string(port), "system");
-            servers.emplace_back(std::make_unique<ServerEmulator>(config.serverIp, port, ioContext, config));
-
-            if (!servers.back()->isBound()) {
-                logMessage("Не удалось привязаться к порту " + std::to_string(port), "error");
-            } else {
-                logMessage("Сервер успешно запущен на порту " + std::to_string(port), "server");
-            }
-        } catch (const std::exception& e) {
-            logMessage("Ошибка создания сервера на порту " + std::to_string(port) + ": " + std::string(e.what()), "error");
-        }
-    }
-
-    logMessage("Система работает. Для завершения нажмите Ctrl+C", "system");
-    ioContext.run();
-
-    return 0;
-}
+            logMessage("С

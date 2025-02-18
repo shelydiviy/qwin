@@ -2,8 +2,8 @@
 #define SERVER_EMULATOR_H
 
 #include <string>
-#include <asio.hpp>
-#include "utils.h"
+#include <asio.hpp> // Подключаем Asio
+#include "utils.h"  // Подключаем utils.h
 
 class ServerEmulator {
 public:
@@ -14,7 +14,7 @@ public:
     bool isBound() const;
 
 private:
-    asio::ip::udp::socket socket; // Сокет должен быть первым
+    asio::ip::udp::socket socket; // UDP-сокет должен быть первым
     asio::io_context& ioContext;
     Config config;
     std::string ip;

@@ -1,4 +1,6 @@
 #include "utils.h"
+#include <cstring> // Для memcpy
+#include <iostream> // Для std::cout
 
 // Логирование сообщений
 void logMessage(const std::string& message, const std::string& level) {
@@ -17,7 +19,7 @@ size_t createMasterServerPacket(uint8_t* buffer, size_t bufferSize,
     size_t totalSize = payload.size();
     if (totalSize > bufferSize) return 0;
 
-    memcpy(buffer, payload.c_str(), totalSize);
+    memcpy(buffer, payload.c_str(), totalSize); // Используем memcpy
 
     return totalSize;
 }
