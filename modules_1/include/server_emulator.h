@@ -3,7 +3,7 @@
 
 #include <string>
 #include <asio.hpp>
-#include "utils.h" // Добавляем utils.h
+#include "utils.h"
 
 class ServerEmulator {
 public:
@@ -14,13 +14,15 @@ public:
     bool isBound() const;
 
 private:
-    asio::ip::udp::socket socket; // Сокет должен быть инициализирован раньше
+    asio::ip::udp::socket socket; // Сокет должен быть первым
     asio::io_context& ioContext;
-    Config config; // Конфигурация сервера
+    Config config;
     std::string ip;
     int port;
     bool bound = false;
 
+    void handleA2SInfoRequest(const asio::ip::udp::endpoint& senderEndpoint);
+    void handleA2SPlayerRequest(const asio::ip::udp::endpoint& senderEndpoint);
     void sendMasterServerInfo();
 };
 

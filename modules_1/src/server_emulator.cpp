@@ -2,15 +2,12 @@
 #include "utils.h"
 
 ServerEmulator::ServerEmulator(const std::string& ipAddrParam, int portNumParam, asio::io_context& ioContextParam, const Config& configParam)
-    : socket(ioContextParam, asio::ip::udp::endpoint(asio::ip::make_address(ipAddrParam), portNumParam)), ioContext(ioContextParam), config(configParam), ip(ipAddrParam), port(portNumParam), bound(false) {
-    try {
-        if (socket.is_open()) {
-            bound = true;
-        }
-    } catch (const std::exception& e) {
-        logMessage("Ошибка при создании сервера: " + std::string(e.what()), "error");
-    }
-}
+    : socket(ioContextParam, asio::ip::udp::endpoint(asio::ip::make_address(ipAddrParam), portNumParam)),
+      ioContext(ioContextParam),
+      config(configParam),
+      ip(ipAddrParam),
+      port(portNumParam),
+      bound(false) {}
 
 ServerEmulator::~ServerEmulator() {
     if (bound) {
@@ -43,7 +40,7 @@ void ServerEmulator::listenForConnections() {
                                           }
                                       });
 
-            sendMasterServerInfo(); // Отправка информации мастер-серверу каждую минуту
+            sendMasterServerInfo();
             std::this_thread::sleep_for(std::chrono::minutes(1));
         }
     };
