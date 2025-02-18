@@ -8,16 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Поиск библиотеки Boost
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
-# Поиск библиотеки Asio
-find_package(Asio REQUIRED)
-
-# Добавление директории include для заголовочных файлов
-include_directories(include)
-
-# Добавляем пути к Asio, если используется заголовочная-only версия
-if(NOT ASIO_FOUND)
-    include_directories(third_party/asio/include)
+# Добавляем пути к Asio (заголовочная-only библиотека)
+set(ASIO_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/third_party/asio/include")
+if(NOT EXISTS "${ASIO_INCLUDE_DIR}/asio.hpp")
+    message(FATAL_ERROR "Asio not found in ${ASIO_INCLUDE_DIR}. Please clone it as a submodule.")
 endif()
+
+include_directories(include ${ASIO_INCLUDE_DIR})
 
 # Создание исполняемого файла
 add_executable(qwin
@@ -28,4 +25,4 @@ add_executable(qwin
 )
 
 # Связывание с библиотеками
-target_link_libraries(qwin PRIVATE Boost::system Boost::filesystem Asio::asio)
+target_link_libraries(qwin PRIVATE Boost::system Boost::filesystem)
