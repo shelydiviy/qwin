@@ -1,52 +1,83 @@
-// src/main.cpp
-#include "server_emulator.h"
-#include "steam.h"
+#include "udp_proxy.h"
+#include "utils.h"
+#include <iostream>
+#include <memory>
 #include <thread>
 #include <vector>
-#include <memory>
-#include <asio.hpp>
 
-void worker(asio::io_context& ioContext) {
-    ioContext.run();
+Config loadConfig(const std::string& configPath) {
+    return loadConfig(configPath);
 }
 
-void initializeThreadPool(asio::io_context& ioContext, size_t numThreads) {
-    std::vector<std::thread> threads;
-    for (size_t i = 0; i < numThreads; ++i) {
-        threads.emplace_back(worker, std::ref(ioContext));
-    }
-
-    for (auto& t : threads) {
-        if (t.joinable()) {
-            t.join();
+class ThreadPool {
+public:
+    ThreadPool(std::size_t threadsCount) : ioContext(), workers(threadsCount) {
+        for (std::size_t i = 0; i < threadsCount; ++i) {
+            workers.emplace_back([this]() { ioContext.run(); });
         }
     }
-}
 
-int main() {
+    ~ThreadPool() {
+        ioContext.stop();
+        for (auto& worker : workers) {
+            if (worker.joinable()) {
+                worker.join();
+            }
+        }
+    }
+
+    asio::io_context& getIoContext() { return ioContext; }
+
+private:
+    asio::io_context ioContext;
+    std::vector<std::thread> workers;
+};
+
+int main(int argc, char* argv[]) {
     try {
-        asio::io_context ioContext;
-
-        // Инициализация пула потоков
-        size_t numThreads = std::thread::hardware_concurrency();
-        if (numThreads == 0) {
-            std::cerr << "Не удалось определить количество ядер процессора. Используется 1 поток." << std::endl;
-            numThreads = 1;
+        if (argc < 2) {
+            logMessage("Ошибка: не указан путь к конфигурационному файлу", "error");
+            std::cerr << "Использование: " << argv[0] << " --config <путь_к_файлу>" << std::endl;
+            return 1;
         }
-        initializeThreadPool(ioContext, numThreads);
 
-        // Создание и запуск Steam модуля
-        Steam steam(ioContext);
-        steam.start();
+        // Загрузка конфигурации
+        std::string configPath = argv[2];
+        Config config = loadConfig(configPath);
 
-        // Создание и запуск серверов
-        ServerEmulator server;
-        server.start();
+        // Создание пула потоков
+        ThreadPool pool(std::thread::hardware_concurrency());
+        asio::io_context& ioContext = pool.getIoContext();
 
-        // Запускаем цикл обработки событий
-        ioContext.run();
-    } catch (std::exception& e) {
-        std::cerr << "Ошибка: " << e.what() << std::endl;
+        // Создание серверов
+        std::vector<std::unique_ptr<ServerEmulator>> servers;
+        for (int portNum = config.serverPortStart; portNum <= config.serverPortEnd; ++portNum) {
+            try {
+                logMessage("Создание сервера на порту " + std::to_string(portNum), "system");
+                servers.emplace_back(std::make_unique<ServerEmulator>(config.serverIp, portNum, ioContext, config));
+
+                if (!servers.back()->isBound()) {
+                    logMessage("Не удалось привязаться к порту " + std::to_string(portNum), "error");
+                } else {
+                    logMessage("Сервер запущен на порту " + std::to_string(portNum), "server");
+                }
+            } catch (const std::exception& e) {
+                logMessage("Ошибка создания сервера на порту " + std::to_string(portNum) + ": " + std::string(e.what()), "error");
+            }
+        }
+
+        // Создание UDP Proxy
+        UdpProxy proxy(config.serverPortStart, config.serverPortEnd, config.remoteServerIp, config.remoteServerPort, ioContext, config);
+        proxy.startProxy();
+
+        // Ожидание завершения работы
+        logMessage("Система работает. Для завершения нажмите Ctrl+C", "system");
+        pool.getIoContext().run();
+
+    } catch (const std::exception& e) {
+        logMessage("Критическая ошибка: " + std::string(e.what()), "error");
+        std::cerr << "Критическая ошибка: " << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

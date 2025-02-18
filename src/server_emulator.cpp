@@ -47,19 +47,17 @@ void ServerEmulator::sendMasterServerInfo() {
         asio::ip::udp::resolver::query query(asio::ip::udp::v4(), config.masterServerIp, std::to_string(config.masterServerPort));
         asio::ip::udp::endpoint masterEndpoint = *resolver.resolve(query);
 
-        // Создаем пакет для отправки мастер-серверу
         uint8_t buffer[1400];
         size_t packetSize = createMasterServerPacket(buffer, sizeof(buffer), ip, port, config.serverName, config.mapName, config.players, config.maxPlayers, config.protocolVersion);
 
-        // Отправляем пакет мастер-серверу
         socket.async_send_to(asio::buffer(buffer, packetSize), masterEndpoint,
-                             [masterIp = config.masterServerIp](std::error_code ec, [[maybe_unused]] std::size_t bytesSent) {
-                                 if (ec) {
-                                     logMessage("Ошибка отправки информации мастер-серверу " + masterIp + ": " + ec.message(), "error");
-                                 } else {
-                                     logMessage("Информация успешно отправлена мастер-серверу " + masterIp, "server");
-                                 }
-                             });
+                            [masterIp = config.masterServerIp](std::error_code ec, [[maybe_unused]] std::size_t bytesSent) {
+                                if (ec) {
+                                    logMessage("Ошибка отправки информации мастер-серверу " + masterIp + ": " + ec.message(), "error");
+                                } else {
+                                    logMessage("Информация успешно отправлена мастер-серверу " + masterIp, "server");
+                                }
+                            });
     } catch (const std::exception& e) {
         logMessage("Ошибка при отправке информации мастер-серверу: " + std::string(e.what()), "error");
     }
