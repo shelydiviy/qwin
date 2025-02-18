@@ -28,7 +28,7 @@ size_t createA2SInfoPacket(uint8_t* buffer, size_t bufferSize,
                           int players, int maxPlayers, int protocolVersion) {
     if (bufferSize < 1400) return 0;
 
-    uint8_t header[] = { '\xFF', '\xFF', '\xFF', '\xFF', 'I' };
+    uint8_t header[] = { 0xFF, 0xFF, 0xFF, 0xFF, 'I' }; // Используем явные uint8_t
     std::string payload = serverName + "\0" + mapName + "\0" + std::to_string(players) + "\0" + std::to_string(maxPlayers) + "\0" + std::to_string(protocolVersion);
 
     size_t totalSize = sizeof(header) - 1 + payload.size();
@@ -45,7 +45,7 @@ size_t createA2SPlayerPacket(uint8_t* buffer, size_t bufferSize,
                             const std::vector<std::string>& playersList) {
     if (bufferSize < 1400) return 0;
 
-    uint8_t header[] = { '\xFF', '\xFF', '\xFF', '\xFF', 'P' };
+    uint8_t header[] = { 0xFF, 0xFF, 0xFF, 0xFF, 'P' }; // Используем явные uint8_t
     std::string payload;
 
     for (const auto& player : playersList) {
