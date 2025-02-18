@@ -2,6 +2,7 @@
 #include "utils.h"
 #include <asio.hpp>
 #include <unordered_map>
+#include <memory>
 #include <chrono>
 
 // Конструктор с переименованными параметрами

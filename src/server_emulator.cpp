@@ -3,6 +3,9 @@
 #include <thread>
 #include <chrono>
 
+ServerEmulator::ServerEmulator(const std::string& ipAddrParam, int portNumParam, asio::io_context& ioContextParam, const Config& configParam)
+    : ip(ipAddrParam), port(portNumParam), ioContext(ioContextParam), config(configParam) {
+
 // Конструктор с переименованными параметрами
 ServerEmulator::ServerEmulator(const std::string& ipAddr, int portNum, const Config& configData)
     : ip(ipAddr), port(portNum), bound(false), config(configData),
