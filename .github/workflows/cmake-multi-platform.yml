@@ -33,6 +33,11 @@ jobs:
         fi
         cmake --version
 
+    - name: Install Boost
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libboost-all-dev
+
     - name: Set reusable strings
       id: strings
       shell: bash
