@@ -1,0 +1,13 @@
+{
+    "server_ip": "127.0.0.1",
+    "server_port_start": 27015,
+    "server_port_end": 27020,
+    "master_server_ip": "hl2master.steampowered.com",
+    "master_server_port": 27011,
+    "server_name": "My CS 1.6 Server",
+    "map_name": "de_dust2",
+    "players": 0,
+    "max_players": 32,
+    "protocol_version": 48,
+    "players_list": ["Player1", "Player2", "Player3"]
+}
