@@ -1,19 +1,18 @@
+# CMakeLists.txt
 cmake_minimum_required(VERSION 3.10)
 
-project(tiny-csgo-mirror-system)
+project(qwin LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-find_package(Boost REQUIRED COMPONENTS system)
-
-include_directories(include)
-
-add_executable(tiny-csgo-mirror-system
+add_executable(qwin
     src/main.cpp
-    src/server_emulator.cpp
-    src/udp_proxy.cpp
-    src/utils.cpp
+    src/server.cpp
+    src/server.h
+    src/steam.cpp
+    src/steam.h
 )
 
-target_link_libraries(tiny-csgo-mirror-system PRIVATE Boost::system)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
+target_link_libraries(qwin PRIVATE Boost::system Boost::filesystem)
